@@ -1,17 +1,17 @@
 # HerStory [WORK IN PROGRESS]
 
-###Cahier des charges fonctionnelles
+### Cahier des charges fonctionnelles
 
-####Présentation générale : 
+#### Présentation générale : 
 
 HerStory est une application web dédiée à la mise en lumière des portraits de femmes ayant apporté des contributions majeures dans divers domaines tels que les sciences de l'ingénierie, les sciences humaines, et bien d'autres. L'application repose sur la participation collaborative de contributeurs, qui disposent de rôles différenciés : de la simple soumission de contenu à la relecture et à la modération des contributions. 
 
-####Contexte : 
+#### Contexte : 
 Les femmes sont encore largement victimes de l'effet Matilda, un phénomène qui rend leurs contributions invisibles en attribuant souvent leurs travaux à leurs homologues masculins. De plus, les pages Wikipédia consacrées à ces figures féminines sont fréquemment incomplètes, sous-documentées, voire supprimées. L'objectif d'HerStory est de pallier ce manque de reconnaissance en mettant exclusivement en avant des femmes, afin de proposer des modèles inspirants et de susciter des vocations, notamment auprès des jeunes filles.
 
-####Fonctionnalités détaillées : 
+#### Fonctionnalités détaillées : 
 
-#####Présentation des portraits
+##### Présentation des portraits
 
 L'application permet de consulter des portraits de femmes, comprenant :  
 - Une biographie complète.  
@@ -19,7 +19,7 @@ L'application permet de consulter des portraits de femmes, comprenant :
 - Les dates de naissance et, le cas échéant, de décès.  
 - Une photo
 
-#####Gestion des rôles et permissions
+##### Gestion des rôles et permissions
 
 L’application intègre une gestion fine des utilisateurs avec des rôles définis, chacun ayant des droits et des restrictions spécifiques.  
 
@@ -63,7 +63,7 @@ L’application intègre une gestion fine des utilisateurs avec des rôles défi
     - Tous les droits d’un admin.  
     - Nommer de nouveaux admins.  
 
-#####Gestion des notifications 
+##### Gestion des notifications 
 
 L'application intègre un système de notifications en temps réel, conçu pour optimiser les processus collaboratifs :  
 **Pour les relecteurs** :  
@@ -73,7 +73,7 @@ L'application intègre un système de notifications en temps réel, conçu pour 
   - Notification lorsque leur soumission est validée ou refusée.  
 
 
-####Aspects techniques
+#### Aspects techniques
 
 L'application HerStory repose sur une architecture moderne et modulaire, conçue pour assurer des performances optimales et une évolutivité à long terme.
 
@@ -95,7 +95,7 @@ L'application HerStory repose sur une architecture moderne et modulaire, conçue
 **Communication en temps réel** :
   - L'application implémente un système de notifications en temps réel à l’aide des WebSockets, permettant une interaction rapide et une meilleure expérience utilisateur.
 
-#####Gestion des rôles utilisateurs
+##### Gestion des rôles utilisateurs
 
 La gestion des rôles et des permissions est une composante essentielle de l’application.
 Intégrée directement au back-end, elle est conçue pour contrôler l’accès aux fonctionnalités en fonction du rôle utilisateur (visiteur, contributeur, relecteur, admin, superadmin).
