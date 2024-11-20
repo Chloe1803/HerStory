@@ -77,7 +77,7 @@ L'application intègre un système de notifications en temps réel, conçu pour 
 
 L'application HerStory repose sur une architecture moderne et modulaire, conçue pour assurer des performances optimales et une évolutivité à long terme.
 
-#####Technologies utilisées
+##### Technologies utilisées
 
 **Client (Front-end)** :
   - Développé avec Angular, un framework JavaScript/TypeScript.
