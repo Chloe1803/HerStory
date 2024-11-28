@@ -1,24 +1,26 @@
-﻿<h1 id="tableLabel">Weather forecast</h1>
+<div class="layout-container">
+  <header >
+    <div class="header header-and-footer-container flex items-center justify-between p-1 bg-[url('/assets/img/fond_violet.png')] bg-cover bg-center bg-no-repeat">
+      <h1 class="h1 text-white m-2">HerStory</h1>
+      <div class="flex items-center space-x-2 mr-2">
+        <button class="btn btn-outline-light" *ngIf="!isMobile"><i class="bi bi-search-heart"></i></button>
+        <button class="btn btn-outline-light" *ngIf="!isMobile"><i class="bi bi-funnel"></i></button>
+        <button class="btn btn-outline-light"><i class="bi bi-bell"></i></button>
+        <button class="btn btn-outline-light" *ngIf="!isMobile"><i class="bi bi-list"></i></button>
+        <button class="btn btn-outline-light"><i class="bi bi-person"></i></button>
+      </div>
+    </div>
+  </header>
 
-<p>This component demonstrates fetching data from the server.</p>
+  <main>
+    <router-outlet></router-outlet>
+  </main>
 
-<p *ngIf="!forecasts"><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> for more details.</em></p>
+  <footer *ngIf="isMobile" class="header-and-footer-container bg-[url('/assets/img/fond_footer.png')]">
+    <button class="btn btn-outline-light"><i class="bi bi-search-heart"></i></button>
+    <button class="btn btn-outline-light"><i class="bi bi-funnel"></i></button>
+    <button class="btn btn-outline-light"><i class="bi bi-list"></i></button>
+  </footer>
+</div>
 
-<table *ngIf="forecasts">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let forecast of forecasts">
-            <td>{{ forecast.date }}</td>
-            <td>{{ forecast.temperatureC }}</td>
-            <td>{{ forecast.temperatureF }}</td>
-            <td>{{ forecast.summary }}</td>
-        </tr>
-    </tbody>
-</table>
+

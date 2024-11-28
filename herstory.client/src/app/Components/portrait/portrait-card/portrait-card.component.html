@@ -1,0 +1,27 @@
+<div class="relative max-w-xs w-full h-80 bg-white rounded-lg shadow-lg border-2 border-purple-300 mt-5 ml-5 flex mx-auto" (click)="viewPortrait()">
+  <div class="flex inline-flex">
+    <div class="w-40 h-40 bg-purple-100 border-5 border-purple-300 rounded-lg overflow-hidden absolute top-[-5%] left-[-5%]">
+      <img class="object-cover w-full h-full" [src]="portrait.PortraitURL" alt="{{portrait.FirstName}} {{portrait.LastName}}">
+     </div>
+
+    <div class="absolute left-[50%]">
+      <h2 class="text-xxl font-semibold text-purple-700">
+        {{portrait.FirstName}} {{portrait.LastName}}
+      </h2>
+      <p class="text-sm text-gray-500">
+       {{portrait.BirthDate}}</p>
+      <p class="text-sm text-gray-500" *ngIf="portrait.DeathDate != ''">
+        Décès: {{portrait.DeathDate}}
+      </p>
+    </div>
+  </div>
+  <div class="absolute top-[50%] mx-2">
+    <p>
+      {{portrait.BiographyAbstract}}
+    </p>
+  </div>
+</div>
+
+
+
+

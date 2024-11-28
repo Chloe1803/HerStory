@@ -1,14 +1,7 @@
-﻿:host {
-    max-width: 1280px;
-    padding: 2rem;
-    text-align: center;
+.header-and-footer-container {
+    background-color: mediumpurple;
 }
 
-th, td {
-    padding-left: 1rem;
-    padding-right: 1rem;
-}
-
-table {
-    margin: 0 auto;
+.main-layout-btn {
+    color: white
 }

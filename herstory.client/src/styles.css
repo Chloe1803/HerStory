@@ -1,1 +1,195 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Layout Container */
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Prend toute la hauteur de l'écran */
+}
+
+/* Header */
+header {
+  flex: 0 0 auto; /* Fixe la taille du header */
+  padding: 0;
+  background-image: url('/assets/img/fond_violet.png');
+  background-repeat: no-repeat;
+  background-size: cover; /* L'image couvre tout l'espace */
+  background-position: center;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Main Content */
+main {
+  flex: 1 1 auto; /* Prend tout l'espace disponible */
+  overflow-y: auto; /* Ajoute un scroll si le contenu est trop long */
+  padding: 10px;
+}
+
+/* Footer */
+footer {
+  flex: 0 0 auto; /* Fixe la taille du footer */
+  background-color: #f8f9fa;
+  background-image: url('/assets/img/fond_footer.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 10px;
+}
+
+/* Responsive Rules */
+@media (min-width: 768px) {
+  footer {
+    display: none; /* Cache le footer sur desktop */
+  }
+}
+
+/*Police*/
+
+.poiret-one-regular {
+  font-family: "Poiret One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.roboto-thin {
+  font-family: "Roboto", serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.roboto-light {
+  font-family: "Roboto", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.roboto-regular {
+  font-family: "Roboto", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.roboto-medium {
+  font-family: "Roboto", serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.roboto-bold {
+  font-family: "Roboto", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.roboto-black {
+  font-family: "Roboto", serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.roboto-thin-italic {
+  font-family: "Roboto", serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.roboto-light-italic {
+  font-family: "Roboto", serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.roboto-regular-italic {
+  font-family: "Roboto", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.roboto-medium-italic {
+  font-family: "Roboto", serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.roboto-bold-italic {
+  font-family: "Roboto", serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.roboto-black-italic {
+  font-family: "Roboto", serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
+
+/*Style pour les titres et paragraphe*/
+/* Style global pour le corps */
+body {
+  font-family: "Roboto", serif; /* Roboto pour le contenu principal */
+  font-weight: 400; /* Utilisation de "roboto-regular" par défaut */
+  font-size: 16px; /* Taille de base des paragraphes */
+  line-height: 1.6; /* Espacement agréable pour la lisibilité */
+  color: #333; /* Couleur du texte principale */
+  margin: 0;
+  padding: 0;
+}
+
+/* Style pour les titres */
+h1 {
+  font-family: "Poiret One", sans-serif; /* Poiret One pour les gros titres */
+  font-size: 2.5rem; /* Taille importante pour h1 */
+  font-weight: 400;
+  color: #2c3e50; /* Couleur légèrement sombre pour se démarquer */
+  margin: 1rem 0;
+}
+
+h2 {
+  font-family: "Poiret One", sans-serif;
+  font-size: 2rem; /* Taille plus petite que h1 */
+  font-weight: 400;
+  color: #34495e; /* Variation de couleur pour différencier les niveaux */
+  margin: 0.8rem 0;
+}
+
+h3 {
+  font-family: "Poiret One", sans-serif;
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: #2c3e50;
+  margin: 0.6rem 0;
+}
+
+h4, h5, h6 {
+  font-family: "Roboto", serif; /* Roboto pour les sous-titres */
+  font-weight: 500; /* Style medium */
+  font-size: 1.5rem; /* Ajusté pour h4 */
+  color: #444; /* Couleur légèrement plus neutre */
+  margin: 0.5rem 0;
+}
+
+/* Style pour les paragraphes */
+p {
+  font-family: "Roboto", serif; /* Roboto standard pour les paragraphes */
+  font-weight: 300; /* Utilisation de "roboto-light" pour un effet léger */
+  font-size: 1rem; /* Taille par défaut des paragraphes */
+  line-height: 1.6; /* Espacement des lignes pour faciliter la lecture */
+  margin: 0
+}
+
+
+
