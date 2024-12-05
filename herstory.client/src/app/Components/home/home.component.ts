@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {CommonModule} from '@angular/common'; 
 import { PortraitCardComponent } from '../portrait/portrait-card/portrait-card.component';
 import { Portrait } from '../../interfaces/portrait';
+import { PortraitService } from '../../services/portrait.service'; 
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,23 @@ import { Portrait } from '../../interfaces/portrait';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+  constructor(private portraitService: PortraitService) { }
+
+  ngOnInit(): void {
+    this.portraitService.getPortraits().subscribe({
+      next: (portraits) => {
+        console.log('Portraits:', portraits);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des portraits:', err);
+      },
+    });
+  }
+
+
+
+
+  //Portraits fictifs
   portraits: Portrait[] = [
     {
       ID: 1,
