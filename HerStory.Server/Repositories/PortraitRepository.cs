@@ -3,7 +3,7 @@ using HerStory.Server.Interfaces;
 using HerStory.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace HerStory.Server.Repository
+namespace HerStory.Server.Repositories
 {
     public class PortraitRepository : IPortraitRepository
     {

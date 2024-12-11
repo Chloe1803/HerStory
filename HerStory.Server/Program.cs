@@ -4,6 +4,11 @@ using HerStory.Server;
 using HerStory.Server.Extensions;
 using Microsoft.Extensions.Logging;
 using HerStory.Server.Middleware;
+using HerStory.Server.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.OpenApi.Models;
+using HerStory.Server.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,15 +18,46 @@ builder.Logging.AddConsole();
 builder.Logging.AddDebug();        
 
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter 'Bearer' [space] and your token in the text input below. Example: 'Bearer abcdef12345'"
+    });
 
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
+
+// Services liées a la DB et au entités
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<Seed>();
 builder.Services.AddApplicationServices();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// Gestion des CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
@@ -33,7 +69,36 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Gestion des JWT
+
+// Charge les paramètres JWT depuis appsettings.json
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+// Ajoute les services nécessaires
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = "Jwt";
+    options.DefaultChallengeScheme = "Jwt";
+}).AddScheme<AuthenticationSchemeOptions, JwtAuthenticationHandler>("Jwt", null);
+
+
+
+
 var app = builder.Build();
+
+app.Use(async (context, next) =>
+{
+    // Ignore les requêtes vers Swagger
+    if (context.Request.Path.StartsWithSegments("/swagger"))
+    {
+        await next();
+        return;
+    }
+
+    // Continue avec les autres middlewares
+    await next();
+});
+
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseCors("AllowAngular");
@@ -68,9 +133,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<NotificationHub>("/notifications"); // URL du hub
+});
 
 
 app.Run();

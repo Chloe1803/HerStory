@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {CommonModule} from '@angular/common'; 
 import { PortraitCardComponent } from '../portrait/portrait-card/portrait-card.component';
 import { Portrait } from '../../interfaces/portrait';
-import { PortraitService } from '../../services/portrait.service'; 
+import { PortraitService } from '../../services/portrait/portrait.service';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +25,7 @@ export class HomeComponent {
     });
   }
 
-
+ 
 
 
   //Portraits fictifs

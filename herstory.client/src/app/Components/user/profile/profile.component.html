@@ -1,0 +1,69 @@
+<div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-8 px-6">
+
+
+  <div class="flex justify-between items-center mb-6">
+    <!-- Titre centré sur les petits écrans -->
+    <h2 class="text-4xl font-bold text-purple-700 text-center flex-1">Mon Profil</h2>
+
+    <!-- Bouton de déconnexion aligné à droite -->
+    <button (click)="logout()" class="p-2 py-2 mt-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:bg-gray-400">
+      Déconnexion
+    </button>
+  </div>
+
+  
+
+  <!-- First Name -->
+  <div class="mb-4">
+    <label class="block text-lg font-bold text-purple-700 mb-2">Prénom :</label>
+    <p class="text-lg text-gray-700">{{ profile.firstName }}</p>
+  </div>
+
+  <!-- Last Name -->
+  <div class="mb-4">
+    <label class="block text-lg font-bold text-purple-700 mb-2">Nom :</label>
+    <p class="text-lg text-gray-700">{{ profile.lastName }}</p>
+  </div>
+
+  <!-- Email -->
+  <div class="mb-4">
+    <label class="block text-lg font-bold text-purple-700 mb-2">Email :</label>
+    <p class="text-lg text-gray-700">{{ profile.email }}</p>
+  </div>
+
+  <!-- Role -->
+  <div class="mb-4">
+    <label class="block text-lg font-bold text-purple-700 mb-2">Rôle :</label>
+    <p class="text-lg text-gray-700">{{ profile.role }}</p>
+  </div>
+
+
+  <!-- Created At -->
+  <div class="mb-4">
+    <label class="block text-lg font-bold text-purple-700 mb-2">Membre depuis le :</label>
+    <p class="text-lg text-gray-700">{{ profile.createdAt }}</p>
+  </div>
+
+  <!-- About Me -->
+  <div class="mb-6">
+    <label class="block text-lg font-bold text-purple-700 mb-2">À propos de moi :</label>
+    <p class="text-lg text-gray-700">{{ profile.aboutMe }}</p>
+  </div>
+
+  <!-- Number of Contributions -->
+  <div *ngIf="profile.numberOfContributions > 0" class="mb-4">
+    <label class="block text-lg font-bold text-purple-700 mb-2">Contributions :</label>
+    <p class="text-lg text-gray-700">{{ profile.numberOfContributions }}</p>
+  </div>
+
+  <!-- Number of Reviews -->
+  <div *ngIf="profile.numberOfReviews > 0" class="mb-4">
+    <label class="block text-lg font-bold text-purple-700 mb-2">Avis :</label>
+    <p class="text-lg text-gray-700">{{ profile.numberOfReviews }}</p>
+  </div>
+
+  <!-- Edit Button -->
+  <!--<button (click)="editProfile()" class="w-full py-2 mt-4 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
+    Modifier mon profil
+  </button>-->
+</div>

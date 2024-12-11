@@ -5,9 +5,10 @@
       <div class="flex items-center space-x-2 mr-2">
         <button class="btn btn-outline-light" *ngIf="!isMobile"><i class="bi bi-search-heart"></i></button>
         <button class="btn btn-outline-light" *ngIf="!isMobile"><i class="bi bi-funnel"></i></button>
-        <button class="btn btn-outline-light"><i class="bi bi-bell"></i></button>
+        <button *ngIf="isAuthenticated" class="btn btn-outline-light"><i class="bi bi-bell"></i></button>
         <button class="btn btn-outline-light" *ngIf="!isMobile"><i class="bi bi-list"></i></button>
-        <button class="btn btn-outline-light"><i class="bi bi-person"></i></button>
+        <button *ngIf="!isAuthenticated" class="btn btn-outline-light" (click)="navigateToLogin()"><i class="bi bi-person"></i></button>
+        <button *ngIf="isAuthenticated" class="btn btn-outline-light" (click)="navigateToProfile()"><i class="bi bi-person"></i></button>
       </div>
     </div>
   </header>
@@ -16,10 +17,10 @@
     <router-outlet></router-outlet>
   </main>
 
-  <footer *ngIf="isMobile" class="header-and-footer-container bg-[url('/assets/img/fond_footer.png')]">
+  <footer *ngIf="isMobile"  class="header-and-footer-container bg-[url('/assets/img/fond_footer.png')]">
     <button class="btn btn-outline-light"><i class="bi bi-search-heart"></i></button>
     <button class="btn btn-outline-light"><i class="bi bi-funnel"></i></button>
-    <button class="btn btn-outline-light"><i class="bi bi-list"></i></button>
+    <button *ngIf="isAuthenticated" class="btn btn-outline-light"><i class="bi bi-list"></i></button>
   </footer>
 </div>
 
