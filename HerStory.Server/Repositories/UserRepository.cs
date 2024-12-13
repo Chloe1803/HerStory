@@ -28,6 +28,21 @@ namespace HerStory.Server.Repositories
             return await _context.AppUser.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<AppUser> GetUserProfileByIdAsync(int id)
+        {
+            return await _context.AppUser.Include(u => u.Role)
+                .Include(u => u.LastRoleChange)
+                .Include(u => u.Contributions)
+                .Include(u => u.Reviews)
+                .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task UpdateUser(AppUser user)
+        {
+            _context.AppUser.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<bool> UserEmailExists(string email)
         {
             return await _context.AppUser.AnyAsync(u => u.Email == email);

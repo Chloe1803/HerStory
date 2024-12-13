@@ -6,5 +6,6 @@ namespace HerStory.Server.Interfaces
     {
         public Task<AuthenticationResult> AuthenticateAsync(string email, string password);
         public Task<AuthenticationResult> RegisterAsync(RegisterDto user);
+        public Task<ProfileDto> GetProfileAsync(int id);
     }
 }

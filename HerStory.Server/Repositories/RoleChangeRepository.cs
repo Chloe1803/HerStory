@@ -25,12 +25,34 @@ namespace HerStory.Server.Repositories
 
         public async Task<RoleChange> GetLastRoleChangeByUser(AppUser user)
         {
-            return await _context.RoleChange
-                .Include(rc => rc.AppUser)
-                .Where(rc => rc.AppUser.Id == user.Id)
-                .Where(rc => rc.IsLastChange == true)
-                .FirstOrDefaultAsync(rc => rc.AppUser.Id == user.Id);
+            if (user == null)
+            {
+                Console.WriteLine("Error in GetLastRoleChangeByUser: user is null.");
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            Console.WriteLine($"Getting last role change for user {user.Id}...");
+
+            try
+            {
+                // Exemple d'une requête LINQ (selon votre implémentation)
+                var lastRoleChange = await _context.RoleChange
+                    .Where(rc => rc.AppUserId == user.Id && rc.IsLastChange)
+                    .FirstOrDefaultAsync();
+
+                Console.WriteLine(lastRoleChange != null
+                    ? $"Last role change found: {lastRoleChange.Id}, Status: {lastRoleChange.Status}"
+                    : "No last role change found.");
+
+                return lastRoleChange;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in GetLastRoleChangeByUser: {ex.Message}");
+                throw;
+            }
         }
+
 
         public async Task<bool> UpdateRoleChange(RoleChange roleChange)
         {
@@ -42,7 +64,6 @@ namespace HerStory.Server.Repositories
             }
             catch (Exception)
             {
-               
                 return false;
             }
         }

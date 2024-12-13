@@ -1,4 +1,5 @@
-﻿using HerStory.Server.Dtos.UserDto;
+﻿using AutoMapper;
+using HerStory.Server.Dtos.UserDto;
 using HerStory.Server.Interfaces;
 using HerStory.Server.Models;
 
@@ -9,11 +10,13 @@ namespace HerStory.Server.Services
         private readonly IUserRepository _userRepository;
         private readonly ILogger<UserService> _logger;
         private readonly IRoleChangeService _roleChangeService;
-        public UserService(IUserRepository userRepository, ILogger<UserService> logger, IRoleChangeService roleChangeService)
+        private readonly IMapper _mapper;
+        public UserService(IUserRepository userRepository, ILogger<UserService> logger, IRoleChangeService roleChangeService, IMapper mapper)
         {
             _userRepository = userRepository;
             _logger = logger;
             _roleChangeService = roleChangeService;
+            _mapper = mapper;
         }
         public async Task<AuthenticationResult> AuthenticateAsync(string email, string password)
         {
@@ -72,21 +75,34 @@ namespace HerStory.Server.Services
             {
                 var addedUser = await _userRepository.CreateUser(newUser);
                 var changeRoleRequest = await _roleChangeService.RequestRoleChange(addedUser, 4); //Constante pour les roles à implémenter
-                _logger.LogInformation("User created: {Role}", addedUser.Role.Name);
                 return new AuthenticationResult
                 {
                     IsSuccess = true,
                     User = addedUser
                 };
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError("An error occured while creating the user : ", ex.Message);
                 return new AuthenticationResult
                 {
                     IsSuccess = false,
                     ErrorMessage = "An error occured while creating the user."
                 };
             }
+        }
+
+        public async Task<ProfileDto> GetProfileAsync(int id)
+        {
+            var user = await _userRepository.GetUserProfileByIdAsync(id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var profile = _mapper.Map<ProfileDto>(user);
+
+            return profile;
         }
     }
 }
