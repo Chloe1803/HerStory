@@ -11,37 +11,39 @@
     </button>
   </div>
 
-  
 
-  <!-- First Name -->
-  <div class="mb-4">
-    <label class="block text-lg font-bold text-purple-700 mb-2">Prénom :</label>
-    <p class="text-lg text-gray-700">{{ profile.firstName }}</p>
-  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+    <!-- First Name -->
+    <div class="flex items-center mb-4">
+      <label class="text-lg font-bold text-purple-700 mr-2">Prénom : </label>
+      <p class="text-lg text-gray-700">{{ profile.firstName }}</p>
+    </div>
 
-  <!-- Last Name -->
-  <div class="mb-4">
-    <label class="block text-lg font-bold text-purple-700 mb-2">Nom :</label>
-    <p class="text-lg text-gray-700">{{ profile.lastName }}</p>
-  </div>
+    <!-- Last Name -->
+    <div class="flex items-center mb-4">
+      <label class="text-lg font-bold text-purple-700 mr-2">Nom :</label>
+      <p class="text-lg text-gray-700">{{ profile.lastName }}</p>
+    </div>
 
-  <!-- Email -->
-  <div class="mb-4">
-    <label class="block text-lg font-bold text-purple-700 mb-2">Email :</label>
-    <p class="text-lg text-gray-700">{{ profile.email }}</p>
-  </div>
+    <!-- Email -->
+    <div class="flex items-center mb-4">
+      <label class="text-lg font-bold text-purple-700 mr-2">Email :</label>
+      <p class="text-lg text-gray-700">{{ profile.email }}</p>
+    </div>
 
-  <!-- Role -->
-  <div class="mb-4">
-    <label class="block text-lg font-bold text-purple-700 mb-2">Rôle :</label>
-    <p class="text-lg text-gray-700">{{ profile.role }}</p>
+    <!-- Role -->
+    <div class="flex items-center mb-4">
+      <label class="text-lg font-bold text-purple-700 mr-2">Rôle :</label>
+      <p class="text-lg text-gray-700">{{ RoleConstants.getRoleNameInFrench(profile.role.name) }}</p>
+    </div>
+
   </div>
 
 
   <!-- Created At -->
-  <div class="mb-4">
-    <label class="block text-lg font-bold text-purple-700 mb-2">Membre depuis le :</label>
-    <p class="text-lg text-gray-700">{{ profile.createdAt }}</p>
+  <div class="flex items-center mb-4">
+    <label class="text-lg font-bold text-purple-700 mr-2">Membre depuis le :</label>
+    <p class="text-lg text-gray-700">{{ profile.createdAt | date }}</p>
   </div>
 
   <!-- About Me -->
@@ -62,6 +64,16 @@
     <p class="text-lg text-gray-700">{{ profile.numberOfReviews }}</p>
   </div>
 
+  <!--Button Role Request-->
+  <!-- Si le statut de la demande de rôle est 'Pending', affiche un bouton désactivé -->
+  <button *ngIf="profile.lastRoleChange.status === 'Pending'" class="w-full bg-gray-400  text-white py-2 px-4 rounded cursor-not-allowed" disabled>
+    En attente de validation pour le rôle {{ RoleConstants.getRoleNameInFrench(profile.lastRoleChange.requestedRole.name) }}
+  </button>
+
+  <!-- Si le statut est autre que 'Pending', affiche un bouton actif -->
+  <button *ngIf="profile.lastRoleChange.status !== 'Pending'" class="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:bg-gray-400">
+    Demander à devenir {{ RoleConstants.getRoleNameInFrench(RoleConstants.nextRole(profile.role.name)) }}
+  </button>
   <!-- Edit Button -->
   <!--<button (click)="editProfile()" class="w-full py-2 mt-4 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
     Modifier mon profil

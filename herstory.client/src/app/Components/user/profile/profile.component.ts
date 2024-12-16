@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/authentification/auth.service';
 import { ProfileUser } from '../../../interfaces/user';
-import { UserService } from '../../../services/user/user.service'; 
+import { UserService } from '../../../services/user/user.service';
+import { RoleConstants, RoleName } from '../../../constants/role-constants'; 
 
 @Component({
   selector: 'app-profile',
@@ -10,11 +11,11 @@ import { UserService } from '../../../services/user/user.service';
 })
 export class ProfileComponent {
   profile!: ProfileUser;
+  RoleConstants = RoleConstants;
   constructor(private authService: AuthService, private userService: UserService) { }
 
   ngOnInit(): void {
     this.userService.getProfile().subscribe((profile: ProfileUser) => {
-      console.log(profile);
       this.profile = profile;
     });
     }
@@ -22,5 +23,10 @@ export class ProfileComponent {
   logout(): void {
     this.authService.logout();
   }
+
+  requestRoleChange(): void {
+    console.log('Requesting role change');
+  }
+
 
 }

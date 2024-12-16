@@ -8,7 +8,9 @@ import { HomeComponent } from './Components/home/home.component';
 import { PortraitDetailsComponent } from './Components/portrait/portrait-details/portrait-details.component';
 import { LoginComponent } from './Components/user/login/login.component';
 import { RegisterComponent } from './Components/user/register/register.component';
-import {ProfileComponent} from './Components/user/profile/profile.component'; 
+import { ProfileComponent } from './Components/user/profile/profile.component';
+import { RoleManagementComponent } from './Components/user/role-management/role-management.component';
+import {ContributionManagementComponent} from './Components/contribution/contribution-management/contribution-management.component'; 
 
 const routes: Routes = [
   {
@@ -23,7 +25,18 @@ const routes: Routes = [
   {
     path:'register', component: RegisterComponent
   },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] }];
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  {
+    path: 'role-management', component: RoleManagementComponent, canActivate: [RoleGuard], data: {
+      roles: ['Reviewer', 'Admin', 'SuperAdmin']
+    }
+  },
+  {
+    path: 'contribution-management', component: ContributionManagementComponent, canActivate: [RoleGuard], data: {
+      roles: ['Reviewer', 'Admin', 'SuperAdmin']
+    }
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

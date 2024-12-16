@@ -1,6 +1,8 @@
 ﻿using HerStory.Server.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using HerStory.Server.Dtos.UserDto;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace HerStory.Server.Controllers
 {
@@ -19,7 +21,7 @@ namespace HerStory.Server.Controllers
         [ProducesResponseType(200, Type = typeof(ProfileDto))]
         public async Task<IActionResult> GetProfile()
         {
-            var userIdClaim = User.FindFirst("id")?.Value;
+            var userIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 
             if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
             {

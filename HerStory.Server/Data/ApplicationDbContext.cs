@@ -1,4 +1,5 @@
-﻿using HerStory.Server.Models;
+﻿using HerStory.Server.Enums;
+using HerStory.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -26,6 +27,14 @@ namespace HerStory.Server.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Mappe l'Enum RoleName à une chaîne de caractères dans la base de données
+            modelBuilder.Entity<Role>()
+                .Property(r => r.Name)
+                .HasConversion(
+                    v => v.ToString(),  
+                    v => (RoleName)Enum.Parse(typeof(RoleName), v)  
+                );
 
             // Relation Portrait-Categrory (Many-to-Many)
             modelBuilder.Entity<PortraitCategory>()

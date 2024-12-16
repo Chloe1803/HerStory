@@ -1,6 +1,8 @@
 ﻿using HerStory.Server.Interfaces;
 using HerStory.Server.Models;
-using Microsoft.IdentityModel.Protocols.Configuration;
+using HerStory.Server.Constants;
+using AutoMapper;
+using HerStory.Server.Dtos.RoleChangeDto;
 
 namespace HerStory.Server.Services
 {
@@ -8,11 +10,27 @@ namespace HerStory.Server.Services
     {
         private readonly IRoleChangeRepository _roleChangeRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public RoleChangeService(IRoleChangeRepository roleChangeRepository, IUserRepository userRepository)
+        public RoleChangeService(IRoleChangeRepository roleChangeRepository, IUserRepository userRepository, IMapper mapper)
         {
             _roleChangeRepository = roleChangeRepository;
             _userRepository = userRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<ICollection<RoleChangeListDto>> GetAllPendingRoleChanges(AppUser user)
+        {
+            var allPendingRoleChanges = await _roleChangeRepository.GetAllPendingRoleChanges();
+
+            // Filtre les demandes de changement de rôle en fonction de l'accès de l'utilisateur
+            var filteredRoleChanges = allPendingRoleChanges
+                .Where(rc => RoleConstants.RoleHierarchy.HasAccess(user.Role.Name, rc.RequestedRole.Name))
+                .ToList();
+
+            var result = _mapper.Map<ICollection<RoleChangeListDto>>(filteredRoleChanges);
+
+            return result;
         }
 
         public async Task<RoleChange> RequestRoleChange(AppUser user, int RequestedRoleId)

@@ -48,7 +48,14 @@ public class JwtAuthenticationHandler : AuthenticationHandler<AuthenticationSche
             };
 
             var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
-            var ticket = new AuthenticationTicket(principal, "Jwt");
+
+            var roles = principal.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();
+            var identity = new ClaimsIdentity(principal.Identity);
+            foreach (var role in roles)
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Role, role));
+            }
+            var ticket = new AuthenticationTicket(new ClaimsPrincipal(identity), "Jwt");
 
             return AuthenticateResult.Success(ticket);
         }

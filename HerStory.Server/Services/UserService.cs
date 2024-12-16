@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using HerStory.Server.Constants;
 using HerStory.Server.Dtos.UserDto;
+using HerStory.Server.Enums;
 using HerStory.Server.Interfaces;
 using HerStory.Server.Models;
 
@@ -66,7 +68,7 @@ namespace HerStory.Server.Services
                 LastName = user.LastName,
                 Email = user.Email,
                 HashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password),
-                RoleId = 8, // RoleId 8 pour les "visiteurs" en attente de validation -> constante à définir
+                RoleId = RoleConstants.RoleIds[RoleName.Visitor],
                 AboutMe = user.AboutMe,
                 CreatedAt = DateTime.Now,
             };
@@ -74,7 +76,7 @@ namespace HerStory.Server.Services
             try
             {
                 var addedUser = await _userRepository.CreateUser(newUser);
-                var changeRoleRequest = await _roleChangeService.RequestRoleChange(addedUser, 4); //Constante pour les roles à implémenter
+                var changeRoleRequest = await _roleChangeService.RequestRoleChange(addedUser, RoleConstants.RoleIds[RoleName.Contributor]); 
                 return new AuthenticationResult
                 {
                     IsSuccess = true,
@@ -103,6 +105,11 @@ namespace HerStory.Server.Services
             var profile = _mapper.Map<ProfileDto>(user);
 
             return profile;
+        }
+
+        public async Task<AppUser> GetUserById(int id)
+        {
+            return await _userRepository.GetUserByIdAsync(id);
         }
     }
 }

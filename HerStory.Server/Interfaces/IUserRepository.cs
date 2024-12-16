@@ -5,6 +5,7 @@ namespace HerStory.Server.Interfaces
     public interface IUserRepository
     {
         public Task<AppUser> GetUserByEmailAsync(string email);
+        public Task<AppUser> GetUserByIdAsync(int id);
         public Task<AppUser> CreateUser(AppUser user);
         public Task<bool> UserEmailExists(string email);
         public Task UpdateUser(AppUser user);

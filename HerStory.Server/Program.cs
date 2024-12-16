@@ -7,6 +7,7 @@ using HerStory.Server.Middleware;
 using HerStory.Server.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
+
 using Microsoft.OpenApi.Models;
 using HerStory.Server.Hubs;
 
@@ -15,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Configure le logging 
 builder.Logging.ClearProviders();  
 builder.Logging.AddConsole();      
-builder.Logging.AddDebug();        
+builder.Logging.AddDebug();
 
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
@@ -70,21 +71,33 @@ builder.Services.AddCors(options =>
 });
 
 // Gestion des JWT
+builder.Services.AddScoped<JwtAuthenticationHandler>();
 
 // Charge les paramètres JWT depuis appsettings.json
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
 
 // Ajoute les services nécessaires
+builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = "Jwt";
     options.DefaultChallengeScheme = "Jwt";
+
 }).AddScheme<AuthenticationSchemeOptions, JwtAuthenticationHandler>("Jwt", null);
 
 
 
-
 var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 
 app.Use(async (context, next) =>
 {
@@ -100,12 +113,23 @@ app.Use(async (context, next) =>
 });
 
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
-app.UseCors("AllowAngular");
-
-
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
+app.UseRouting();
+app.UseCors("AllowAngular");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<NotificationHub>("/notifications"); // URL du hub
+});
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
 
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
     SeedData(app);
@@ -125,25 +149,5 @@ void SeedData(IHost app)
         service.SeedData();
     }
 }
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-
-app.UseRouting();
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-    endpoints.MapHub<NotificationHub>("/notifications"); // URL du hub
-});
-
 
 app.Run();

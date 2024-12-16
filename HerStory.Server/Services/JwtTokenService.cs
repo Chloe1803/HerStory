@@ -17,13 +17,14 @@ public class JwtTokenService
 
     public string GenerateToken(string userId, string userRole)
     {
+       
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, userId),
+            new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
             new Claim(ClaimTypes.Role, userRole),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
-
+       
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -35,6 +36,7 @@ public class JwtTokenService
             signingCredentials: credentials
         );
 
+        var tokenHandler = new JwtSecurityTokenHandler();
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

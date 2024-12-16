@@ -1,8 +1,8 @@
 ﻿using HerStory.Server.Data;
+using HerStory.Server.Enums;
 using HerStory.Server.Interfaces;
 using HerStory.Server.Models;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace HerStory.Server.Repositories
 {
@@ -20,7 +20,17 @@ namespace HerStory.Server.Repositories
 
             return await _context.RoleChange
                 .Include(rc=> rc.AppUser)
+                .Include(rc => rc.RequestedRole)
                 .FirstOrDefaultAsync(rc => rc.Id == roleChange.Id);
+        }
+
+        public async Task<ICollection<RoleChange>> GetAllPendingRoleChanges()
+        {
+            return await _context.RoleChange
+                .Include(rc => rc.AppUser)
+                .Include(rc => rc.RequestedRole)
+                .Where(rc => rc.Status == RoleChangeStatus.Pending)
+                .ToListAsync();
         }
 
         public async Task<RoleChange> GetLastRoleChangeByUser(AppUser user)

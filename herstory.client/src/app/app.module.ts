@@ -11,6 +11,8 @@ import { LoginComponent } from './Components/user/login/login.component';
 import { AuthInterceptor } from './services/authentification/auth.interceptor';
 import { RegisterComponent } from './Components/user/register/register.component';
 import { ProfileComponent } from './Components/user/profile/profile.component';
+import { RoleManagementComponent } from './Components/user/role-management/role-management.component';
+import { ContributionManagementComponent } from './Components/contribution/contribution-management/contribution-management.component';
 
 
 
@@ -21,6 +23,8 @@ import { ProfileComponent } from './Components/user/profile/profile.component';
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
+    RoleManagementComponent,
+    ContributionManagementComponent,
    
   ],
   imports: [

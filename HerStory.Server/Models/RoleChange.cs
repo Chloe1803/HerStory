@@ -1,4 +1,5 @@
 ﻿using HerStory.Server.Enums;
+using System.Text.Json.Serialization;
 
 namespace HerStory.Server.Models
 {

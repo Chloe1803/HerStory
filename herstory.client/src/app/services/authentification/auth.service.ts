@@ -13,8 +13,10 @@ import jwt_decode from 'jwt-decode';
   providedIn: 'root',
 })
 export class AuthService {
-  private tokenKey = 'authToken';
+  private tokenKey = "HerStorySecretKeyForJWTHoppefullyLongEnough";
   private isAuthenticated = new BehaviorSubject<boolean>(this.hasToken());
+  private currentRole !: string;
+
 
   constructor(private http: HttpClient, private router: Router, private api: ApiService) { }
 
@@ -24,6 +26,7 @@ export class AuthService {
       map(response => {
         this.setToken(response.token);
         this.isAuthenticated.next(true);
+        this.setRole();
       })
     );
   }
@@ -33,6 +36,7 @@ export class AuthService {
       map(response => {
         this.setToken(response.token);
         this.isAuthenticated.next(true);
+        this.setRole();
       })
     );
   }
@@ -63,15 +67,62 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  getUserInfo(): { id: string; role?: string } | null {
+  getUserInfo(): { id: string; role: string } | null {
     const token = this.getToken();
-    if (token) {
-      const decodedToken: any = jwt_decode(token);
-      return {
-        id: decodedToken.sub,
-        role: decodedToken.role, 
-      };
+ 
+
+    if (token && token.includes('.')) {
+      try {
+        const decodedToken: any = jwt_decode(token);
+       
+
+        // Récupérer le rôle avec la clé complète
+        const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+        if (!role) {
+          console.error('Rôle introuvable dans le token');
+          return null;
+        }
+
+        return {
+          id: decodedToken.sub,
+          role: role,
+        };
+      } catch (error) {
+        console.error('Erreur lors du décodage du token :', error);
+        return null;
+      }
     }
+
+    console.error('Token non valide ou absent');
     return null;
+  }
+
+  setRole(): void {
+    const userInfo = this.getUserInfo();
+    if (userInfo) {
+      this.currentRole = userInfo.role;
+    }
+  }
+
+
+
+  authorizeContributorAndUp(): boolean {
+
+    this.setRole();
+    if (this.currentRole === 'Visitor' || this.currentRole === 'Banned') {
+      return false;
+    }
+
+    return true;
+  }
+
+  authorizeReviewerandUp(): boolean {
+
+    this.setRole();
+    if (this.currentRole === 'Reviewer' || this.currentRole === 'Admin' || this.currentRole === 'SuperAdmin') {
+      return true;
+    }
+
+    return false;
   }
 }
