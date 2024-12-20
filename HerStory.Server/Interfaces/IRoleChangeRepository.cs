@@ -9,5 +9,7 @@ namespace HerStory.Server.Interfaces
         public Task<RoleChange> GetLastRoleChangeByUser(AppUser user);
         public Task<ICollection<RoleChange>> GetAllPendingRoleChanges();
 
+        public Task<RoleChange> GetRoleChangeById(int id);    
+
     }
 }

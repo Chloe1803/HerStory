@@ -30,6 +30,20 @@ namespace HerStory.Server.Constants
             {
                 return RoleLevels[userRole] >= RoleLevels[requiredRole];
             }
+
+            public static RoleName? GetNextRole(RoleName currentRole)
+            {
+                var roleList = RoleLevels.OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList();
+                var currentIndex = roleList.IndexOf(currentRole);
+
+                if (currentIndex == -1 || currentIndex == roleList.Count - 1)
+                {
+                    return null; // Aucun rôle suivant ou rôle non trouvé
+                }
+
+                return roleList[currentIndex + 1];
+            }
+
         }
     }
 }

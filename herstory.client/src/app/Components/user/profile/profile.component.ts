@@ -15,17 +15,23 @@ export class ProfileComponent {
   constructor(private authService: AuthService, private userService: UserService) { }
 
   ngOnInit(): void {
+    this.getProfile();
+  }
+
+  getProfile() {
     this.userService.getProfile().subscribe((profile: ProfileUser) => {
       this.profile = profile;
     });
-    }
+  }
   
   logout(): void {
     this.authService.logout();
   }
 
   requestRoleChange(): void {
-    console.log('Requesting role change');
+    this.userService.requestNextRole().subscribe(() => {
+      this.getProfile();
+    });
   }
 
 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { UserService } from '../../../services/user/user.service';
-import { RoleChangeRequest } from '../../../interfaces/role-change';
+import { RoleChangeRequest, RoleChangeResponse } from '../../../interfaces/role-change';
+import { RoleConstants } from '../../../constants/role-constants';
 
 @Component({
   selector: 'app-role-management',
@@ -9,11 +10,16 @@ import { RoleChangeRequest } from '../../../interfaces/role-change';
 })
 export class RoleManagementComponent {
   pendingRequests: RoleChangeRequest[] = [];
+  RoleConstants = RoleConstants;
 
   constructor(private userService: UserService) {
   }
 
   ngOnInit(): void {
+    this.getPendingRequests();
+  }
+
+  getPendingRequests() {
     this.userService.getPendingRoleRequest().subscribe(
       (data) => {
         this.pendingRequests = data;
@@ -21,11 +27,28 @@ export class RoleManagementComponent {
     );
   }
 
+
   acceptRequest(request: RoleChangeRequest) {
-    // Accepter la demande
+    let response: RoleChangeResponse = {
+      action: 'accept'
+    };
+
+    this.userService.respondRoleRequest(request.id, response).subscribe(
+      () => {
+        this.getPendingRequests();
+      }
+    );
   }
 
   rejectRequest(request: RoleChangeRequest) {
-    // Rejeter la demande
+    let response: RoleChangeResponse = {
+      action: 'reject'
+    };
+
+    this.userService.respondRoleRequest(request.id, response).subscribe(
+      () => {
+        this.getPendingRequests();
+      }
+    );
   }
 }

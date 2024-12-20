@@ -71,7 +71,7 @@
   </button>
 
   <!-- Si le statut est autre que 'Pending', affiche un bouton actif -->
-  <button *ngIf="profile.lastRoleChange.status !== 'Pending'" class="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:bg-gray-400">
+  <button *ngIf="profile.lastRoleChange.status !== 'Pending'" class="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:bg-gray-400" (click)="requestRoleChange()">
     Demander à devenir {{ RoleConstants.getRoleNameInFrench(RoleConstants.nextRole(profile.role.name)) }}
   </button>
   <!-- Edit Button -->

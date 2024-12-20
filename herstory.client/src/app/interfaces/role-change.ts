@@ -14,3 +14,7 @@ export interface RoleChangeRequest {
   requestedRole: Role;
   
 }
+
+export interface RoleChangeResponse {
+  action: string;
+}

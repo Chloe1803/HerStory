@@ -7,5 +7,8 @@ namespace HerStory.Server.Interfaces
     {
         public Task<RoleChange> RequestRoleChange(AppUser user, int RequestedRoleId);
         public Task<ICollection<RoleChangeListDto>> GetAllPendingRoleChanges(AppUser user);
+        public Task<RoleChange> GetRoleChangeById(int id);
+        public Task<bool> AcceptRoleChange(AppUser respondingUser, RoleChange roleChange);
+        public Task<bool> RejectRoleChange(AppUser respondingUser, RoleChange roleChange);
     }
 }

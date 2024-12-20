@@ -63,6 +63,15 @@ namespace HerStory.Server.Repositories
             }
         }
 
+        public Task<RoleChange> GetRoleChangeById(int id)
+        {
+            return _context.RoleChange
+                .Include(rc => rc.AppUser)
+                .Include(rc => rc.RequestedRole)
+                .FirstOrDefaultAsync(rc => rc.Id == id);
+        }
+
+     
 
         public async Task<bool> UpdateRoleChange(RoleChange roleChange)
         {
