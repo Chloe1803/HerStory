@@ -52,5 +52,43 @@ namespace HerStory.Server.Controllers
                 throw ex;
             }
         }
-     }
+
+        [HttpGet("categories")]
+        [ProducesResponseType(200, Type = typeof(ICollection<CategoryDto>))]
+        public async Task<IActionResult> GetCategories()
+        {
+            try
+            {
+                var categories = await _portraitService.GetCategories();
+                if (categories == null || !categories.Any())
+                {
+                    return NotFound();
+                }
+                return Ok(categories);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet("fields")]
+        [ProducesResponseType(200, Type = typeof(ICollection<FieldDto>))]
+        public async Task<IActionResult> GetFields()
+        {
+            try
+            {
+                var fields = await _portraitService.GetFields();
+                if (fields == null || !fields.Any())
+                {
+                    return NotFound();
+                }
+                return Ok(fields);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
 }

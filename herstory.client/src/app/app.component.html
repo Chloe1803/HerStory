@@ -10,7 +10,7 @@
           <button class="btn btn-outline-light " *ngIf="!isMobile" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-list"></i></button>
 
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li *ngIf="autorizeContributorAndUp()"> <a class="dropdown-item">Créer un nouveau portrait</a></li>
+            <li *ngIf="autorizeContributorAndUp()"> <a class="dropdown-item" (click)="navigateToNewContribution()">Créer un nouveau portrait</a></li>
             <li *ngIf=" authorizeReviewerandUp()"> <a class="dropdown-item" (click)="navigateToContributionManagement()">Gestion des contributions</a></li>
             <li *ngIf=" authorizeReviewerandUp()"> <a class="dropdown-item" (click)="navigateToRoleManagement()">Gestion des utilisateurs</a></li>
           </ul>

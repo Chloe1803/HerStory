@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import {CommonModule} from '@angular/common'; 
-import { Portrait } from '../../../interfaces/portrait';
+import { PortraitCard } from '../../../interfaces/portrait';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,11 +12,11 @@ import { Router } from '@angular/router';
 })
 export class PortraitCardComponent {
   
-  @Input() portrait!: Portrait;
+  @Input() portrait!: PortraitCard;
 
   constructor(private router: Router) { }
 
   viewPortrait(): void {
-    this.router.navigate(['/portrait', this.portrait.ID]);
+    this.router.navigate(['/portrait', this.portrait.id]);
   }
 }

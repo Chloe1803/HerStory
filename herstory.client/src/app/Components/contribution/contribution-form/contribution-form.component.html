@@ -1,0 +1,136 @@
+<div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-8 px-6">
+  <h2 class="text-4xl font-bold text-purple-700 text-center mb-6">
+    {{ editMode ? 'Modifier le portrait' : 'Ajouter un nouveau portrait' }}
+  </h2>
+
+  <form [formGroup]="portraitForm" (ngSubmit)="onSubmit()">
+    <!-- First Name Input -->
+    <div class="mb-4">
+      <label class="block text-lg font-bold text-purple-700 mb-2" for="firstName">Prénom :</label>
+      <input id="firstName"
+             type="text"
+             formControlName="firstName"
+             class="w-full px-4 py-2 rounded-lg border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+             placeholder="Entrez le prénom" />
+    </div>
+
+    <!-- Last Name Input -->
+    <div class="mb-4">
+      <label class="block text-lg font-bold text-purple-700 mb-2" for="lastName">Nom :</label>
+      <input id="lastName"
+             type="text"
+             formControlName="lastName"
+             class="w-full px-4 py-2 rounded-lg border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+             placeholder="Entrez le nom" />
+    </div>
+
+    <!-- Date of Birth Input -->
+    <div class="mb-4">
+      <label class="block text-lg font-bold text-purple-700 mb-2" for="dateOfBirth">Date de naissance :</label>
+      <input id="dateOfBirth"
+             type="date"
+             formControlName="dateOfBirth"
+             class="w-full px-4 py-2 rounded-lg border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
+    </div>
+
+    <!-- Date of Death Input -->
+    <div class="mb-4">
+      <label class="block text-lg font-bold text-purple-700 mb-2" for="dateOfDeath">Date de décès :</label>
+      <input id="dateOfDeath"
+             type="date"
+             formControlName="dateOfDeath"
+             class="w-full px-4 py-2 rounded-lg border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
+    </div>
+
+    <!-- Biography Abstract Input -->
+    <div class="mb-4">
+      <label class="block text-lg font-bold text-purple-700 mb-2" for="biographyAbstract">Résumé biographique :</label>
+      <textarea id="biographyAbstract"
+                formControlName="biographyAbstract"
+                class="w-full px-4 py-2 rounded-lg border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                placeholder="Entrez un résumé biographique" rows="3"></textarea>
+    </div>
+
+    <!-- Biography Full Input -->
+    <div class="mb-4">
+      <label class="block text-lg font-bold text-purple-700 mb-2" for="biographyFull">Biographie complète :</label>
+      <textarea id="biographyFull"
+                formControlName="biographyFull"
+                class="w-full px-4 py-2 rounded-lg border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                placeholder="Entrez la biographie complète" rows="6"></textarea>
+    </div>
+
+    <!-- Photo URL Input -->
+    <div class="mb-4">
+      <label class="block text-lg font-bold text-purple-700 mb-2" for="photoUrl">URL de la photo :</label>
+      <input id="photoUrl"
+             type="url"
+             formControlName="photoUrl"
+             class="w-full px-4 py-2 rounded-lg border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+             placeholder="Entrez l'URL de la photo" />
+    </div>
+
+    <!-- Button to test photo URL -->
+    <div class="mb-4 flex flex-col items-start">
+      <button type="button" (click)="testPhotoUrl()" class="py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 mb-2">
+        Tester le lien de la photo
+      </button>
+
+      <!-- Error message if URL is invalid -->
+      <div *ngIf="!photoUrlValid&&isPhotoTested" class="text-red-500 text-sm">
+        L'URL de la photo est invalide.
+      </div>
+
+      <!-- Show the image if URL is valid -->
+      <div *ngIf="photoUrlValid && portraitForm.get('photoUrl')?.value" class="w-56 h-56 bg-purple-100 border-4 border-purple-300 rounded-lg overflow-hidden ">
+        <img [src]="portraitForm.get('photoUrl')?.value" alt="Photo de {{portraitForm.get('firstName')?.value}} {{portraitForm.get('lastName')?.value}}" class="object-cover w-full h-full">
+      </div>
+    </div>
+
+
+    <!-- Country of Birth Input -->
+    <div class="mb-4">
+      <label class="block text-lg font-bold text-purple-700 mb-2" for="countryOfBirth">Pays de naissance :</label>
+      <input id="countryOfBirth"
+             type="text"
+             formControlName="countryOfBirth"
+             class="w-full px-4 py-2 rounded-lg border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+             placeholder="Entrez le pays de naissance" />
+    </div>
+
+    <!-- Categories Selection -->
+    <div class="mb-4">
+      <label class="block text-lg font-bold text-purple-700 mb-2">Catégories :</label>
+      <div *ngFor="let category of categoryFormArray.controls; let i = index" class="flex items-center gap-4 mb-2">
+        <select [formControl]="category"
+                class="flex-grow px-4 py-2 rounded-lg border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+          <option *ngFor="let cat of availableCategories" [value]="cat.id">{{ cat.name }}</option>
+        </select>
+        <button type="button" (click)="removeCategory(i)" class="text-red-500 hover:text-red-700">Supprimer</button>
+      </div>
+      <button type="button" (click)="addCategory()" class="mt-2 text-purple-600 hover:text-purple-800">Ajouter une catégorie</button>
+    </div>
+
+    <!-- Fields Selection -->
+    <div class="mb-4">
+      <label class="block text-lg font-bold text-purple-700 mb-2">Champs :</label>
+      <div *ngFor="let field of fieldFormArray.controls; let i = index" class="flex items-center gap-4 mb-2">
+        <select [formControl]="field"
+                class="flex-grow px-4 py-2 rounded-lg border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+          <option *ngFor="let fld of availableFields" [value]="fld.id">{{ fld.name }}</option>
+        </select>
+        <button type="button" (click)="removeField(i)" class="text-red-500 hover:text-red-700">Supprimer</button>
+      </div>
+      <button type="button" (click)="addField()" class="mt-2 text-purple-600 hover:text-purple-800">Ajouter un champ</button>
+    </div>
+
+
+    <!-- Submit Button -->
+    <button type="submit"
+            [disabled]="portraitForm.invalid"
+            class="w-full py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:bg-gray-400">
+      {{ editMode ? 'Mettre à jour' : 'Ajouter' }}
+    </button>
+  </form>
+</div>
+

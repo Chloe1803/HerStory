@@ -9,6 +9,7 @@
         BiographyAbstact,
         BiographyFull,
         PhotoUrl,
-        CountryOfBirth
+        CountryOfBirth,
+        Unknown
     }
 }

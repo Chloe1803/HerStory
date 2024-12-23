@@ -10,7 +10,8 @@ import { LoginComponent } from './Components/user/login/login.component';
 import { RegisterComponent } from './Components/user/register/register.component';
 import { ProfileComponent } from './Components/user/profile/profile.component';
 import { RoleManagementComponent } from './Components/user/role-management/role-management.component';
-import {ContributionManagementComponent} from './Components/contribution/contribution-management/contribution-management.component'; 
+import { ContributionManagementComponent } from './Components/contribution/contribution-management/contribution-management.component';
+import { ContributionFormComponent } from './Components/contribution/contribution-form/contribution-form.component';
 
 const routes: Routes = [
   {
@@ -32,8 +33,13 @@ const routes: Routes = [
     }
   },
   {
-    path: 'contribution-management', component: ContributionManagementComponent, canActivate: [RoleGuard], data: {
+    path: 'contribution-management', component: ContributionManagementComponent, canActivate:  [RoleGuard], data: {
       roles: ['Reviewer', 'Admin', 'SuperAdmin']
+    }
+  },
+  {
+    path: 'new-contribution', component: ContributionFormComponent, canActivate: [RoleGuard], data: {
+      roles: ['Contributor','Reviewer', 'Admin', 'SuperAdmin']
     }
   }
 ];

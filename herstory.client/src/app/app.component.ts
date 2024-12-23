@@ -92,5 +92,8 @@ export class AppComponent implements OnInit {
     this.router.navigate(['contribution-management']);
   }
 
+  navigateToNewContribution(): void {
+    this.router.navigate(['new-contribution']);
+  }
   
 }

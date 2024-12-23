@@ -21,6 +21,19 @@ namespace HerStory.Server.Services
             return portraits;
         }
 
+        public async Task<ICollection<CategoryDto>> GetCategories()
+        {
+            var categories = _mapper.Map<ICollection<CategoryDto>>(await _portraitRepository.GetCategories());
+
+            return categories;
+        }
+
+        public async Task<ICollection<FieldDto>> GetFields()
+        {
+            var fields = _mapper.Map<ICollection<FieldDto>>(await _portraitRepository.GetFields());
+            return fields;
+        }
+
         public async Task<PortraitDetailDto> GetPortraitByIdAsync(int id)
         {
             var portrait = _mapper.Map<PortraitDetailDto>(await _portraitRepository.GetProtraitByIdAsync(id));

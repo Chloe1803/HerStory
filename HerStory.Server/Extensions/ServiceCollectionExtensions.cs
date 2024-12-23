@@ -17,6 +17,8 @@ namespace HerStory.Server.Extensions
             services.AddScoped<IRoleChangeService, RoleChangeService>();
             services.AddScoped<JwtTokenService>();
             services.AddScoped<NotificationHub>();
+            services.AddScoped<IContributionRepository, ContributionRepository>();
+            services.AddScoped<IContributionService, ContributionService>();
 
             return services;
         }

@@ -6,5 +6,7 @@ namespace HerStory.Server.Interfaces
     {
         Task<ICollection<Portrait>> GetAllPortraitsAsync();
         Task<Portrait> GetProtraitByIdAsync(int id);
-   }
+        Task<ICollection<Category>> GetCategories();
+        Task<ICollection<Field>> GetFields();
+    }
 }

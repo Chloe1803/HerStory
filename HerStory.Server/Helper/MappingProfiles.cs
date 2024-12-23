@@ -35,6 +35,9 @@ namespace HerStory.Server.Helper
                 .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.AppUser.LastName))
                 .ForMember(dest => dest.RequestedRole, opt => opt.MapFrom(src => src.RequestedRole));
 
+            CreateMap<Category, CategoryDto>();
+            CreateMap<Field, FieldDto>();
+
         }
     }
 }

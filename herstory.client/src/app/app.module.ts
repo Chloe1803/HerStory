@@ -13,6 +13,7 @@ import { RegisterComponent } from './Components/user/register/register.component
 import { ProfileComponent } from './Components/user/profile/profile.component';
 import { RoleManagementComponent } from './Components/user/role-management/role-management.component';
 import { ContributionManagementComponent } from './Components/contribution/contribution-management/contribution-management.component';
+import { ContributionFormComponent } from './Components/contribution/contribution-form/contribution-form.component';
 
 
 
@@ -25,6 +26,7 @@ import { ContributionManagementComponent } from './Components/contribution/contr
     ProfileComponent,
     RoleManagementComponent,
     ContributionManagementComponent,
+    ContributionFormComponent,
    
   ],
   imports: [
