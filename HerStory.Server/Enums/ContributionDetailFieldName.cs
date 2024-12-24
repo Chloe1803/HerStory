@@ -4,12 +4,14 @@
     {
         FirstName,
         LastName,
-        YearOfBirth,
-        YearOfDeath,
-        BiographyAbstact,
+        DateOfBirth,
+        DateOfDeath,
+        BiographyAbstract,
         BiographyFull,
         PhotoUrl,
         CountryOfBirth,
+        Categories,
+        Fields,
         Unknown
     }
 }

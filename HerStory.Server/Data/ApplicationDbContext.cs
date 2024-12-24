@@ -36,6 +36,22 @@ namespace HerStory.Server.Data
                     v => (RoleName)Enum.Parse(typeof(RoleName), v)  
                 );
 
+            // Mappe l'Enum ContributionStatus à une chaîne de caractères dans la base de données
+            modelBuilder.Entity<Contribution>()
+                .Property(c => c.Status)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (ContributionStatus)Enum.Parse(typeof(ContributionStatus), v)
+                );
+
+            //Mappe l'Enum FieldName à une chaîne de caractères dans la base de données
+            modelBuilder.Entity<ContributionDetail>()
+                .Property(cd => cd.FieldName)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (ContributionDetailFieldName)Enum.Parse(typeof(ContributionDetailFieldName), v)
+                );
+
             // Relation Portrait-Categrory (Many-to-Many)
             modelBuilder.Entity<PortraitCategory>()
                 .HasKey(pc => new { pc.PortraitId, pc.CategoryId });

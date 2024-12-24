@@ -104,7 +104,7 @@
       <div *ngFor="let category of categoryFormArray.controls; let i = index" class="flex items-center gap-4 mb-2">
         <select [formControl]="category"
                 class="flex-grow px-4 py-2 rounded-lg border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-          <option *ngFor="let cat of availableCategories" [value]="cat.id">{{ cat.name }}</option>
+          <option *ngFor="let cat of availableCategories" [value]="cat.name">{{ cat.name }}</option>
         </select>
         <button type="button" (click)="removeCategory(i)" class="text-red-500 hover:text-red-700">Supprimer</button>
       </div>
@@ -117,7 +117,7 @@
       <div *ngFor="let field of fieldFormArray.controls; let i = index" class="flex items-center gap-4 mb-2">
         <select [formControl]="field"
                 class="flex-grow px-4 py-2 rounded-lg border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-          <option *ngFor="let fld of availableFields" [value]="fld.id">{{ fld.name }}</option>
+          <option *ngFor="let fld of availableFields" [value]="fld.name">{{ fld.name }}</option>
         </select>
         <button type="button" (click)="removeField(i)" class="text-red-500 hover:text-red-700">Supprimer</button>
       </div>

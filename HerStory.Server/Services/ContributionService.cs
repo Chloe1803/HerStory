@@ -16,7 +16,7 @@ namespace HerStory.Server.Services
         {
             var contribution = new Contribution
             {
-                PortraitId = contributionDto.PortraitId.GetValueOrDefault(0),
+                PortraitId = contributionDto.PortraitId,
                 Contributor = user,
                 ContributorId = user.Id,
                 Status = ContributionStatus.Pending,
@@ -34,7 +34,7 @@ namespace HerStory.Server.Services
                     // Crée un ContributionDetail pour chaque changement
                     var contributionDetail = new ContributionDetail
                     {
-                        FieldName = Enum.TryParse(fieldName, out ContributionDetailFieldName fieldNameEnum)
+                        FieldName = Enum.TryParse(fieldName, true, out ContributionDetailFieldName fieldNameEnum)
                             ? fieldNameEnum  // Si l'énumération existe
                             : ContributionDetailFieldName.Unknown,  // Valeur par défaut ou "Unknown"
                         NewValue = newValue
