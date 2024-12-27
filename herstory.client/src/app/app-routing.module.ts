@@ -12,6 +12,7 @@ import { ProfileComponent } from './Components/user/profile/profile.component';
 import { RoleManagementComponent } from './Components/user/role-management/role-management.component';
 import { ContributionManagementComponent } from './Components/contribution/contribution-management/contribution-management.component';
 import { ContributionFormComponent } from './Components/contribution/contribution-form/contribution-form.component';
+import { ContributionViewComponent } from './Components/contribution/contribution-view/contribution-view.component';
 
 const routes: Routes = [
   {
@@ -40,6 +41,11 @@ const routes: Routes = [
   {
     path: 'new-contribution', component: ContributionFormComponent, canActivate: [RoleGuard], data: {
       roles: ['Contributor','Reviewer', 'Admin', 'SuperAdmin']
+    }
+  },
+  {
+    path: 'view-contribution', component: ContributionViewComponent, canActivate: [RoleGuard], data: {
+      roles: ['Reviewer', 'Admin', 'SuperAdmin']
     }
   }
 ];

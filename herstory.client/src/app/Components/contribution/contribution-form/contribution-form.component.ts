@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Category, Field, PortraitDetail } from '../../../interfaces/portrait';
 import { NewContribution } from '../../../interfaces/contribution';
@@ -23,7 +24,7 @@ export class ContributionFormComponent implements OnInit {
   photoUrlValid: boolean = false;
   isPhotoTested = false;
 
-  constructor(private location: Location, private fb: FormBuilder, private portraitService: PortraitService, private contributionService: ContributionService) { }
+  constructor(private location: Location, private fb: FormBuilder, private portraitService: PortraitService, private contributionService: ContributionService, private router :Router) { }
 
   ngOnInit(): void {
     const navigation = this.location.getState() as { edit: boolean; portrait: PortraitDetail };
@@ -111,7 +112,7 @@ export class ContributionFormComponent implements OnInit {
     
     this.contributionService.submitContribution(contribution).subscribe({
       next: () => {
-        console.log('Contribution soumise avec succès');
+        this.router.navigate([''])
       },
       error: () => {
         console.error('Erreur lors de la soumission de la contribution:');

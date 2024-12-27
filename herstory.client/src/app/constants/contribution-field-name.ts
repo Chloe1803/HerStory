@@ -6,5 +6,7 @@ export enum ContributionDetailFieldName {
   BiographyAbstract,
   BiographyFull,
   PhotoUrl,
-  CountryOfBirth
+  CountryOfBirth,
+  Categories,
+  Fields
 }

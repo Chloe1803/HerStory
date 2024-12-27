@@ -1,1 +1,85 @@
-<p>contribution-management works!</p>
+<div class="container">
+  <h2 class="title">Contributions en attentes</h2>
+
+  <div>
+    <h3 class="sub-title">Mes relectures en attentes</h3>
+    <div class="table-container">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Portrait</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let contribution of userPendingReviews">
+            <td *ngIf="!contribution.isNewPortrait"></td>
+            <td *ngIf="contribution.isNewPortrait">[Nouveau]</td>
+            <td> {{contribution.portraitFirstName}} {{contribution.portraitLastName}}</td>
+            <td class="actions">
+              <button (click)="reviewContribution(contribution)" class="btn btn-accept">
+                <i class="bi bi-check-circle"></i>
+                <span>Relire</span>
+              </button>
+              <button (click)="unAssignUser(contribution.contributionId)" class="btn btn-reject">
+                <i class="bi bi-x-circle"></i>
+                <span>Retirer</span>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="userPendingReviews.length === 0">
+            <td colspan="3" class="no-requests">Aucune relecture en attente.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="sub-title">Relectures en attentes d'attributions</h3>
+    <div class="table-container">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Portrait</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let contribution of unassignedPendingReviews">
+            <td *ngIf="!contribution.isNewPortrait"></td>
+            <td *ngIf="contribution.isNewPortrait">[Nouveau]</td>
+            <td> {{contribution.portraitFirstName}} {{contribution.portraitLastName}}</td>
+            <td class="actions">
+              <button (click)="viewContribution(contribution)" class="btn btn-see">
+                <i class="bi bi-eye"></i>
+                <span>Voir</span>
+              </button>
+              <button (click)="assignUser(contribution.contributionId)" class="btn btn-accept">
+                <i class="bi bi-arrow-down-left-circle"></i>
+                <span>M'attribuer</span>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="unassignedPendingReviews.length === 0">
+            <td colspan="3" class="no-requests">Aucune relecture en attente.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+
+<div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true" style="position: fixed; top: 20px; right: 20px;">
+  <div class="d-flex">
+    <div class="toast-body">
+      Une erreur est survenue lors de l'attribution de la contribution.
+    </div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
+

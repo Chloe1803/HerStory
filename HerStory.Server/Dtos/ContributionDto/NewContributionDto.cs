@@ -1,6 +1,4 @@
-﻿
-
-namespace HerStory.Server.Dtos
+﻿namespace HerStory.Server.Dtos.ContributionDto
 {
     public class NewContributionDto
     {
