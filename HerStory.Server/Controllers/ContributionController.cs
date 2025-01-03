@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
 using HerStory.Server.Dtos.ContributionDto;
 using System.Data;
+using HerStory.Server.Models;
 
 namespace HerStory.Server.Controllers
 {
@@ -198,7 +199,7 @@ namespace HerStory.Server.Controllers
         //[Authorize(Roles = " Admin, SuperAdmin")]
         //public async Task<IActionResult> AssignUserToContribution(int contributionId, int userId)
         //{
-           
+
         //}
 
         //[HttpDelete("{contributionId}/reviewer/{userId}")]
@@ -206,6 +207,44 @@ namespace HerStory.Server.Controllers
         //public async Task<IActionResult> UnassignUserFromContribution(int contributionId, int userId)
         //{ }
 
+
+        [HttpPut("review")]
+        [Authorize(Roles = "Reviewer, Admin, SuperAdmin")]
+        [ProducesResponseType(204)]
+        public async Task<IActionResult> handleContributionReview([FromBody] ContributionReviewDto reviewDto)
+        {
+            var userIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            var user = await _userService.GetUserById(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            if (reviewDto == null)
+                return NotFound("Review not found");
+
+            var contribution = await _contributionService.GetContributionById(reviewDto.ContributionId);
+            if (contribution == null)
+                return NotFound("Contribution not found.");
+
+            if (contribution.ReviewerId != user.Id)
+                return BadRequest("this user is not the assigned reviewer");
+
+            
+            if (reviewDto.IsAccepted == false)
+            {
+                _contributionService.RejectContribution(reviewDto, contribution, user);
+                return Ok();
+            }
+
+            return Ok();
+
+        }
 
 
     }

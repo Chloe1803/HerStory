@@ -1,6 +1,10 @@
 <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-8 px-6">
-  <h2 class="text-4xl font-bold text-purple-700 text-center mb-6">
-    {{ config.isReview ? 'Contribution en attente d\'un relecteur' : 'Contribution en attente de relecture' }}
+  <h2 *ngIf="config.isNewPortrait" class="text-4xl font-bold text-purple-700 text-center mb-6">
+    {{ config.isReview ? 'Nouveau portrait en attente de relecture' :  'Nouveau portrait en attente d\'un relecteur'}}
+  </h2>
+
+  <h2 *ngIf="!config.isNewPortrait" class="text-4xl font-bold text-purple-700 text-center mb-6">
+    {{ config.isReview ? 'Contribution en attente de relecture' :  'Contribution en attente d\'un relecteur'}}
   </h2>
 
   <!-- Visualisation de la contribution -->
@@ -57,7 +61,7 @@
         </div>
         <p *ngIf="!config.isNewPortrait" class="text-purple-300 italic">[modification]</p>
       </div>
-      </div>
+    </div>
 
     <!-- Biography Abstract -->
     <div class="mb-4">
@@ -94,7 +98,7 @@
       </ul>
       <ul class="list-disc list-inside text-lg text-purple-700 italic" *ngIf="getContributionDetail(field.Categories) as categories">
         <ng-container *ngIf="!config.isNewPortrait">[modification] </ng-container>
-        <li *ngFor="let category of categories.split(',')">{{ category }}</li>
+        <li *ngFor="let category of parseJsonArray(categories)">{{ category }}</li>
       </ul>
     </div>
 
@@ -106,10 +110,18 @@
       </ul>
       <ul class="list-disc list-inside text-lg text-purple-700 italic" *ngIf="getContributionDetail(field.Fields) as fields">
         <ng-container *ngIf="!config.isNewPortrait">[modification] </ng-container>
-        <li *ngFor="let field of fields.split(',')">{{ field }}</li>
+        <li *ngFor="let field of parseJsonArray(fields)">{{ field }}</li>
       </ul>
     </div>
+
+    <!--contributor-->
+    <div class="mb-4 p-4 bg-gray-100 rounded-lg border border-gray-300">
+      <h3 class="block text-lg font-bold text-grey-700 mb-2 field-label">Contributeur :</h3>
+      <p class="text-lg">{{contribution.contributor.firstName}} {{contribution.contributor.lastName}}</p>
+    </div>
   </div>
+
+  <app-contribution-action [config]="config" (updateConfig)="updateConfig($event)" ></app-contribution-action>
 
 
 </div>

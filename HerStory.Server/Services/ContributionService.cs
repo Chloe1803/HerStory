@@ -12,13 +12,48 @@ namespace HerStory.Server.Services
     {
         private readonly IContributionRepository _contributionRepository;
         private readonly IMapper _mapper;
-        public ContributionService(IContributionRepository contributionRepository, IMapper mapper)
+        private readonly IPortraitService _portraitService;
+        public ContributionService(IContributionRepository contributionRepository, IMapper mapper, IPortraitService portraitService)
         {
             _contributionRepository = contributionRepository;
             _mapper = mapper;
+            _portraitService = portraitService;
 
         }
 
+        public async Task<bool> AcceptContribution(ContributionReviewDto reviewDto, Contribution contribution, AppUser user)
+        {
+            contribution.Status = ContributionStatus.Approved;
+            contribution.ReviewedAt = DateTime.Now;
+            contribution.ReviewComment = reviewDto.Comment;
+
+            var update = await _contributionRepository.UpdateContribution(contribution);
+
+            if (!update)
+            {
+                throw new InvalidOperationException($"Failed to update contribution with ID {contribution.Id}. The update was unsuccessful.");
+            }
+
+            //S'il n'y a pas de portrait associé à la contribution, on crée un nouveau portrait sion on le met à jour
+            if (contribution.PortraitId == null)
+            {
+                var createPortrait = await _portraitService.CreatePortraitFromContribution(contribution);
+                if (!createPortrait)
+                    throw new InvalidOperationException($"Failed to create new portrait");
+
+                return createPortrait;
+            }
+            else
+            {
+                var updatePortrait = await _portraitService.UpdatePortraitFromContribution(contribution);
+                if (!updatePortrait)
+                    throw new InvalidOperationException($"Failed to update portrait");
+
+                return updatePortrait;
+            }
+
+
+        }
 
         public Task<bool> ChangeReviewerAssignment(bool isAssigned, Contribution contribution, AppUser user)
         {
@@ -99,6 +134,16 @@ namespace HerStory.Server.Services
             var pendingContributions = await _contributionRepository.GetAllPendingContributions();
 
             return _mapper.Map<ICollection<ContributionListDto>>(pendingContributions.Where(c => c.ReviewerId == null && c.ContributorId != user.Id).ToList());
+        }
+
+        public async Task<bool> RejectContribution(ContributionReviewDto reviewDto, Contribution contribution, AppUser user)
+        {
+            contribution.Status = ContributionStatus.Rejected;
+            contribution.ReviewedAt = DateTime.Now;
+            contribution.ReviewComment = reviewDto.Comment;
+
+            return await _contributionRepository.UpdateContribution(contribution);
+
         }
     }
 }

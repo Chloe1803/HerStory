@@ -13,6 +13,19 @@ namespace HerStory.Server.Repositories
             _context = context;
         }
 
+        public async Task<bool> CreatePortrait(Portrait portrait)
+        {
+            try
+            {
+                _context.Portrait.AddAsync(portrait);
+                _context.SaveChangesAsync();
+                return true;
+            }catch
+            {
+                return false;
+            }
+        }
+
         public async Task<ICollection<Portrait>> GetAllPortraitsAsync()
         {
             return await _context.Portrait
@@ -37,6 +50,20 @@ namespace HerStory.Server.Repositories
                 .Include(p => p.PortraitCategories).ThenInclude(pc => pc.Category)
                 .Include(p => p.PortraitFields).ThenInclude(pf => pf.Field)
                 .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<bool> UpdatePortrait(Portrait portrait)
+        {
+           try
+            {
+               _context.Update(portrait);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

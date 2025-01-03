@@ -9,5 +9,7 @@ namespace HerStory.Server.Interfaces
         Task<PortraitDetailDto> GetPortraitByIdAsync(int id);
         Task<ICollection<CategoryDto>> GetCategories();
         Task<ICollection<FieldDto>> GetFields();
+        Task<bool> CreatePortraitFromContribution(Contribution contribution);
+        Task<bool> UpdatePortraitFromContribution(Contribution contibution);
     }
 }

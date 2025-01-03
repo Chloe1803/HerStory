@@ -1,1 +1,32 @@
-<p>contribution-action works!</p>
+<button *ngIf="!config.isReview" (click)="assignSeltToContribution()" class="w-full mt-5 mb-2 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:bg-gray-300">S'assigner comme relecteur</button>
+<div *ngIf="config.isReview" class="border-2 border-gray-300 p-4 rounded-md">
+  <!-- En-tête de l'encart -->
+  <h3 class="text-xl font-semibold mb-4">Encart du Relecteur</h3>
+
+  <!-- Champ de commentaire -->
+  <div class="mb-4">
+    <label for="comment" class="block text-sm font-medium text-gray-700">Commentaire :</label>
+    <textarea id="comment" [(ngModel)]="comment" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" rows="4" ></textarea>
+  </div>
+
+  <!-- Boutons Accepter / Refuser -->
+  <div class="flex space-x-4">
+    <button (click)="openConfirmModal('accept')" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Accepter la contribution</button>
+    <button (click)="openConfirmModal('reject')" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Refuser la contribution</button>
+  </div>
+
+  <!-- Modale de confirmation -->
+  <div *ngIf="isModalOpen" class="fixed inset-0 flex justify-center items-center bg-gray-600 bg-opacity-50 z-50">
+    <div class="bg-white p-6 rounded-lg w-1/3">
+      <h3 class="text-lg font-semibold mb-4">Confirmation</h3>
+      <p *ngIf="action === 'accept'">Êtes-vous sûr de vouloir accepter cette contribution ?</p>
+      <p *ngIf="action === 'reject'">Êtes-vous sûr de vouloir refuser cette contribution ? Un commentaire est obligatoire.</p>
+
+      <div class="flex space-x-4 justify-end mt-4">
+        <button (click)="handleModalAction(true)" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Oui</button>
+        <button (click)="handleModalAction(false)" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">Non</button>
+      </div>
+    </div>
+  </div>
+</div>
+

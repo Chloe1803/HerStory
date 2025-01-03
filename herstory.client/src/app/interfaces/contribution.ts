@@ -40,3 +40,9 @@ export interface ContributionViewConfig {
   isReview: boolean; 
   isNewPortrait: boolean; 
 }
+
+export interface ContributionReview {
+  contributionId: number;
+  isAccepted: boolean;
+  comment: string;
+}
