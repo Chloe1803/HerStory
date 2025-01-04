@@ -40,4 +40,29 @@ export class PortraitDetailsComponent {
     });
   }
 
+  isValidDateOfDeath(date: Date | undefined): boolean {
+    const invalidDateString = "01/01/1"; // Date invalide sous forme de chaîne
+
+   
+    if (typeof date === 'string') {
+      date = new Date(date); 
+    }
+
+    // Vérifie si la date est un objet Date valide
+    if (date instanceof Date && !isNaN(date.getTime())) {
+      const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+      return formattedDate !== invalidDateString;
+    } else {
+  
+      return false;
+    }
+  }
+
+
+
+
+
+
+
+
 }

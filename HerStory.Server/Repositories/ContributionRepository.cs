@@ -51,20 +51,26 @@ namespace HerStory.Server.Repositories
             return contribution;
         }
 
-
-        public async Task<bool> UpdateContribution(Contribution contribution)
+        public async Task UpdateContribution(Contribution contribution)
         {
             try
             {
-               _context.Update(contribution);
+                _context.Update(contribution);
                 await _context.SaveChangesAsync();
-                return true;
-
             }
-            catch
+            catch (DbUpdateException ex)
             {
-                return false;
+                // Journaliser les erreurs liées à la base de données
+                Console.WriteLine($"Database update error: {ex.Message}");
+                throw new Exception("An error occurred while updating the contribution in the database.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Journaliser toute autre exception inattendue
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+                throw new Exception("An unexpected error occurred.", ex);
             }
         }
+
     }
 }

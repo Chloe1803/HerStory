@@ -3,7 +3,7 @@ export interface PortraitCard {
   firstName: string;
   lastName: string;
   dateOfBirth: Date;
- dateOfDeath?: Date;
+  dateOfDeath: Date;
   photoUrl: string;
   biographyAbstract: string;
   categories: Category[];
@@ -15,7 +15,7 @@ export interface PortraitDetail {
   firstName: string;
   lastName: string;
   dateOfBirth: Date;
-  dateOfDeath?: Date;
+  dateOfDeath: Date;
   photoUrl: string;
   biographyAbstract: string;
   biographyFull: string;

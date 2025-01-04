@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using HerStory.Server.Dtos.ContributionDto;
 using System.Data;
 using HerStory.Server.Models;
+using System.Text.Json;
 
 namespace HerStory.Server.Controllers
 {
@@ -14,11 +15,13 @@ namespace HerStory.Server.Controllers
     {
         private readonly IContributionService _contributionService;
         private readonly IUserService _userService;
+    
 
-        public ContributionController(IContributionService contributionService, IUserService userService)
+        public ContributionController(IContributionService contributionService, IUserService userService )
         {
             _contributionService = contributionService;
             _userService = userService;
+  
         }
 
         [HttpGet("{contributionId}")]
@@ -57,6 +60,7 @@ namespace HerStory.Server.Controllers
                 return NotFound("User not found.");
             }
 
+            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(contributionDto));
             var contribution = await _contributionService.CreateContribution(contributionDto, user);
 
             if (contribution == null)
@@ -149,10 +153,15 @@ namespace HerStory.Server.Controllers
             if (isAssigned)
                 return BadRequest("User already assigned");
 
-            var updated = await _contributionService.ChangeReviewerAssignment(isAssigned, contribution, user);
-
-            if (!updated)
-                return StatusCode(500, "Something went wrong");
+            try
+            {
+                await _contributionService.ChangeReviewerAssignment(isAssigned, contribution, user);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured during reviewer assignent:", ex);
+                throw ex;
+            }
 
             return Ok();
         }
@@ -186,10 +195,15 @@ namespace HerStory.Server.Controllers
             if (!isAssigned)
                 return BadRequest("User is not assigned to contribution");
 
-            var updated = await _contributionService.ChangeReviewerAssignment(isAssigned, contribution, user);
-
-            if (!updated)
-                return StatusCode(500, "Something went wrong");
+            try
+            {
+                await _contributionService.ChangeReviewerAssignment(isAssigned, contribution, user);
+            }
+             catch (Exception ex)
+            {
+                Console.WriteLine("An error occured during reviewer assignent:", ex);
+                throw ex;
+            }          
 
             return Ok();
 
@@ -227,6 +241,8 @@ namespace HerStory.Server.Controllers
 
             if (reviewDto == null)
                 return NotFound("Review not found");
+            Console.WriteLine("ReviewDto content: " + JsonSerializer.Serialize(reviewDto));
+
 
             var contribution = await _contributionService.GetContributionById(reviewDto.ContributionId);
             if (contribution == null)
@@ -238,8 +254,32 @@ namespace HerStory.Server.Controllers
             
             if (reviewDto.IsAccepted == false)
             {
-                _contributionService.RejectContribution(reviewDto, contribution, user);
-                return Ok();
+                Console.WriteLine("rejecting");
+                try
+                {
+                   
+                    await _contributionService.RejectContribution(reviewDto, contribution, user);
+                    return Ok();
+                }
+              
+                     catch (Exception ex)
+                {
+                    Console.WriteLine("An error occured during rejection :", ex);
+                
+                    throw ex;
+                }
+            }else
+            {
+                Console.WriteLine("accepting");
+                try
+                {
+                    await _contributionService.AcceptContribution(reviewDto, contribution, user);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occured during approval :", ex);
+                    throw ex;
+                }
             }
 
             return Ok();

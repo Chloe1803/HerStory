@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api/api.service';
-import { NewContribution, ContributionList, Contribution } from '../../interfaces/contribution'; 
+import { NewContribution, ContributionList, Contribution, ContributionReview } from '../../interfaces/contribution'; 
 
 @Injectable({
   providedIn: 'root'
@@ -35,4 +35,7 @@ export class ContributionService {
     return this.http.get<Contribution>(this.api.apiUrl + '/Contribution/' + contributionId)
   }
 
+  reviewContribution(review: ContributionReview): any {
+    return this.http.put(this.api.apiUrl + '/Contribution/review', review)
+  }
 }

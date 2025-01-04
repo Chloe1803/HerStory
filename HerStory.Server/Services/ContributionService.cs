@@ -21,41 +21,44 @@ namespace HerStory.Server.Services
 
         }
 
-        public async Task<bool> AcceptContribution(ContributionReviewDto reviewDto, Contribution contribution, AppUser user)
+        public async Task AcceptContribution(ContributionReviewDto reviewDto, Contribution contribution, AppUser user)
         {
-            contribution.Status = ContributionStatus.Approved;
-            contribution.ReviewedAt = DateTime.Now;
-            contribution.ReviewComment = reviewDto.Comment;
-
-            var update = await _contributionRepository.UpdateContribution(contribution);
-
-            if (!update)
+            try
             {
-                throw new InvalidOperationException($"Failed to update contribution with ID {contribution.Id}. The update was unsuccessful.");
-            }
+                contribution.Status = ContributionStatus.Approved;
+                contribution.ReviewedAt = DateTime.Now;
+                contribution.ReviewComment = reviewDto.Comment;
 
-            //S'il n'y a pas de portrait associé à la contribution, on crée un nouveau portrait sion on le met à jour
-            if (contribution.PortraitId == null)
+                 await _contributionRepository.UpdateContribution(contribution);
+            }
+            catch (Exception ex)
             {
-                var createPortrait = await _portraitService.CreatePortraitFromContribution(contribution);
-                if (!createPortrait)
-                    throw new InvalidOperationException($"Failed to create new portrait");
-
-                return createPortrait;
+                Console.WriteLine($"Service error: {ex.Message}");
+                throw new Exception("An error occurred while updating the contribution.", ex);
             }
-            else
+          
+            try
             {
-                var updatePortrait = await _portraitService.UpdatePortraitFromContribution(contribution);
-                if (!updatePortrait)
-                    throw new InvalidOperationException($"Failed to update portrait");
-
-                return updatePortrait;
+                //S'il n'y a pas de portrait associé à la contribution, on crée un nouveau portrait sion on le met à jour
+                if (contribution.PortraitId == null)
+                {
+                    await _portraitService.CreatePortraitFromContribution(contribution);
+                }
+                else
+                {
+                    await _portraitService.UpdatePortraitFromContribution(contribution);
+                   
+                }
             }
-
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Service error: {ex.Message}");
+                throw new Exception("An error occurred while updating the contribution.", ex);
+            }
 
         }
 
-        public Task<bool> ChangeReviewerAssignment(bool isAssigned, Contribution contribution, AppUser user)
+        public async Task ChangeReviewerAssignment(bool isAssigned, Contribution contribution, AppUser user)
         {
             //Si l'utilisateur est assigné on le retire comme reviewer sinon on l'assigne
             if (isAssigned)
@@ -68,9 +71,16 @@ namespace HerStory.Server.Services
                 contribution.Reviewer = user;
                 contribution.ReviewerId = user.Id;
             }
-
-            var updated = _contributionRepository.UpdateContribution(contribution);
-            return updated;
+            try
+            {
+                await _contributionRepository.UpdateContribution(contribution);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Service error: {ex.Message}");
+                throw new Exception("An error occurred while changing reviewer.", ex);
+            }   
+           
         }
 
         public async Task<Contribution> CreateContribution(NewContributionDto contributionDto, AppUser user)
@@ -136,13 +146,23 @@ namespace HerStory.Server.Services
             return _mapper.Map<ICollection<ContributionListDto>>(pendingContributions.Where(c => c.ReviewerId == null && c.ContributorId != user.Id).ToList());
         }
 
-        public async Task<bool> RejectContribution(ContributionReviewDto reviewDto, Contribution contribution, AppUser user)
+        public async Task RejectContribution(ContributionReviewDto reviewDto, Contribution contribution, AppUser user)
         {
-            contribution.Status = ContributionStatus.Rejected;
-            contribution.ReviewedAt = DateTime.Now;
-            contribution.ReviewComment = reviewDto.Comment;
+            try
+            {
+                contribution.Status = ContributionStatus.Rejected;
+                contribution.ReviewedAt = DateTime.Now;
+                contribution.ReviewComment = reviewDto.Comment;
 
-            return await _contributionRepository.UpdateContribution(contribution);
+                await _contributionRepository.UpdateContribution(contribution);       
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Service error: {ex.Message}");
+                throw new Exception("An error occurred while accepting the contribution.", ex);
+            }
+
 
         }
     }

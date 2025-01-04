@@ -10,13 +10,35 @@ namespace HerStory.Server.Helper
     public class MappingProfiles : Profile
     {
         public MappingProfiles() {
+
+            CreateMap<Category, CategoryDto>();
+            CreateMap<Field, FieldDto>();
+
             CreateMap<Portrait, PortraitListDto>()
-                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.PortraitCategories.Select(pc => pc.Category)))
-                .ForMember(dest => dest.Fields, opt => opt.MapFrom(src => src.PortraitFields.Select(pf => pf.Field)));
-            
+                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.PortraitCategories.Select(pc => new CategoryDto
+                {
+                    Id = pc.Category.Id,
+                    Name = pc.Category.Name
+                })))
+                .ForMember(dest => dest.Fields, opt => opt.MapFrom(src => src.PortraitFields.Select(pf => new FieldDto
+                 {
+                    Id = pf.Field.Id,
+                    Name = pf.Field.Name
+                 })));
+
             CreateMap<Portrait, PortraitDetailDto>()
-                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.PortraitCategories.Select(pc => pc.Category)))
-                .ForMember(dest => dest.Fields, opt => opt.MapFrom(src => src.PortraitFields.Select(pf => pf.Field)));
+                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.PortraitCategories.Select(pc => new CategoryDto
+                {
+                    Id = pc.Category.Id,
+                    Name = pc.Category.Name
+                })))
+                .ForMember(dest => dest.Fields, opt => opt.MapFrom(src => src.PortraitFields.Select(pf => new FieldDto
+                {
+                    Id = pf.Field.Id,
+                    Name = pf.Field.Name
+                })))
+                .ForMember(dest => dest.DateOfDeath, opt => opt.MapFrom(src => src.DateOfDeath != DateTime.MinValue ? src.DateOfDeath : (DateTime?)null));
+
 
             CreateMap<AppUser, ProfileDto>()
                 .ForMember(dest => dest.numberOfContributions, o => o.MapFrom(src => src.Contributions.Count))
