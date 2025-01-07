@@ -42,6 +42,7 @@ namespace HerStory.Server.Services
                 //S'il n'y a pas de portrait associé à la contribution, on crée un nouveau portrait sion on le met à jour
                 if (contribution.PortraitId == null)
                 {
+                  
                     await _portraitService.CreatePortraitFromContribution(contribution);
                 }
                 else
@@ -119,6 +120,20 @@ namespace HerStory.Server.Services
             return await _contributionRepository.CreateContribution(contribution);
         }
 
+        public async Task<ICollection<UserContributionListDto>> GetAllUserContribution(AppUser user)
+        {
+            try
+            {
+                var contributions = await _contributionRepository.GetAllUserContributions(user);
+                return _mapper.Map<ICollection<UserContributionListDto>>(contributions);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Service error: {ex.Message}");
+                throw ex;
+            }
+        }
+
         public async Task<Contribution> GetContributionById(int id)
         {
             return await _contributionRepository.GetContributionById(id);
@@ -144,6 +159,23 @@ namespace HerStory.Server.Services
             var pendingContributions = await _contributionRepository.GetAllPendingContributions();
 
             return _mapper.Map<ICollection<ContributionListDto>>(pendingContributions.Where(c => c.ReviewerId == null && c.ContributorId != user.Id).ToList());
+        }
+
+        public async Task<UserContributionViewDto> GetUserContributionById(AppUser user, int id)
+        {
+            try
+            {
+                var contribution = await _contributionRepository.GetContributionById(id);
+                if (contribution.ContributorId != user.Id)
+                    throw new InvalidOperationException("User is not the author of the contribution");
+
+                return _mapper.Map<UserContributionViewDto>(contribution);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Service error: {ex.Message}");
+                throw ex;
+            }
         }
 
         public async Task RejectContribution(ContributionReviewDto reviewDto, Contribution contribution, AppUser user)

@@ -1,4 +1,5 @@
 import { ContributionDetailFieldName } from "../constants/contribution-field-name";
+import { ContributionStatus } from "../constants/contribution-status";
 import { PortraitDetail } from "./portrait";
 
 export interface Contribution {
@@ -46,3 +47,22 @@ export interface ContributionReview {
   isAccepted: boolean;
   comment: string;
 }
+
+export interface UserContributionList {
+  contributionId: number;
+  portraitId: number;
+  portraitFirstName: string;
+  portraitLastName: string;
+  isNewPortrait: boolean;
+  status: ContributionStatus;
+}
+
+export interface UserContributionView {
+  id: number;
+  portrait?: PortraitDetail;
+  details: ContributionDetail[];
+  status: ContributionStatus;
+  reviewComment?: string;
+}
+
+

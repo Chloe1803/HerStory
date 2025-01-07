@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import {Router, ActivatedRoute, ParamMap} from '@angular/router'; 
 import { PortraitDetail } from '../../../interfaces/portrait';
 import { PortraitService } from '../../../services/portrait/portrait.service';
-import {AuthService} from '../../../services/authentification/auth.service'; 
+import { AuthService } from '../../../services/authentification/auth.service';
+import { TagColorMapping } from '../../../constants/category-field';
 
 @Component({
   selector: 'app-portrait-details',
@@ -56,13 +57,15 @@ export class PortraitDetailsComponent {
   
       return false;
     }
+
   }
 
+  getColorField(tag: string) {
+    return TagColorMapping.getFieldColor(tag);
+  }
 
-
-
-
-
-
+  getColorCat(tag: string) {
+    return TagColorMapping.getCategoryColor(tag);
+  }
 
 }

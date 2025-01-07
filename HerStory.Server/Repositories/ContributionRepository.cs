@@ -34,6 +34,19 @@ namespace HerStory.Server.Repositories
             return contributions;
         }
 
+        public async Task<ICollection<Contribution>> GetAllUserContributions(AppUser user)
+        {
+            var contributions = await _context.Contribution
+               .Include(c => c.Portrait)
+               .Include(c => c.Reviewer)
+               .Include(c => c.Details)
+               .Where(c => c.ContributorId == user.Id)
+               .OrderByDescending(c => c.CreatedAt)
+               .ToListAsync();
+
+            return contributions;
+        }
+
         public async Task<Contribution> GetContributionById(int Id)
         {
             var contribution = await _context.Contribution

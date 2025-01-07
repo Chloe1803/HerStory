@@ -1,0 +1,34 @@
+<div class="container">
+  <h2 class="title">Mes Contributions</h2>
+
+  <div class="table-container">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Portrait</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let contribution of userContributions">
+          <td *ngIf="contribution.isNewPortrait">[Nouveau]</td>
+          <td *ngIf="!contribution.isNewPortrait"></td>
+          <td>{{ contribution.portraitFirstName }} {{ contribution.portraitLastName }}</td>
+          <td>{{ status.getStatusInFrench(contribution.status) }}</td>
+          <td class="actions">
+            <button (click)="navigateToView(contribution.contributionId)" class="btn btn-view bg-purple-300">
+              <i class="bi bi-eye"></i>
+              <span>Voir Détails</span>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="userContributions.length === 0">
+          <td colspan="4" class="no-requests">Aucune contribution disponible.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

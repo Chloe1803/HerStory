@@ -92,26 +92,42 @@ namespace HerStory.Server.Services
                 CreatedAt = DateTime.Now
             };
 
+           
+            try
+            {
+               await UpdateCategoriesForPortrait(portrait, categoriesAsString);
+               await UpdateFieldsForPortrait(portrait, fieldsAsString);
+
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Echec de l'ajout de catégorie et fields : {ex.Message}");
+                throw ex;
+            }
+
             try
             {
                 await _portraitRepository.CreatePortrait(portrait);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Une erreur est survenue lors de la création du portrait : {ex.Message}");
+                throw ex;
+            }
 
-
-                // Mettre à jour les catégories et les champs
-                await UpdateCategoriesForPortrait(portrait, categoriesAsString);
-                await UpdateFieldsForPortrait(portrait, fieldsAsString);
-
-                await _portraitRepository.UpdatePortrait(portrait);
-
+            try
+            {
                 contribution.PortraitId = portrait.Id;
 
                 await _contributionRepository.UpdateContribution(contribution);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Une erreur est survenue : {ex.Message}");
+                Console.WriteLine($"Une erreur est survenue lors de la mise à jour de la contribution avec l'id du portrait créer : {ex.Message}");
                 throw ex;
             }
+
 
 
         }
@@ -237,19 +253,23 @@ namespace HerStory.Server.Services
         {
             if (string.IsNullOrWhiteSpace(fieldsAsString))
             {
-                portrait.PortraitFields = new List<PortraitField>(); 
+                portrait.PortraitFields = new List<PortraitField>();
+          
                 return;
             }
-
+         
             // Parse les champs
             var fieldNames = JsonConvert.DeserializeObject<List<string>>(fieldsAsString);
             if (fieldNames == null)
+            {
                 return;
+            }
+           
 
             // Récupére les champs de la base de données
             var fields = await _portraitRepository.GetFieldsByNamesAsync(fieldNames);
 
-          
+           
             portrait.PortraitFields = fields.Select(field => new PortraitField
             {
                 PortraitId = portrait.Id,
@@ -258,5 +278,35 @@ namespace HerStory.Server.Services
             }).ToList();
         }
 
+        public async Task<ICollection<PortraitListDto>> SearchByTermAsync(string term)
+        {
+            term = term.ToLower();
+
+            try
+            {
+                var portrait = await _portraitRepository.SearchByName(term);
+
+                return _mapper.Map<ICollection<PortraitListDto>>(portrait);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Une erreur est survenue : {ex.Message}");
+                throw ex;
+            }
+        }
+
+        public async Task<ICollection<PortraitListDto>> FilterAsync(FilterCriteriaDto criteria)
+        {
+            try
+            {
+                var portrait = await _portraitRepository.FilterByCategoryAndField(criteria);
+                return _mapper.Map<ICollection<PortraitListDto>>(portrait);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Une erreur est survenue : {ex.Message}");
+                throw ex;
+            }
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using HerStory.Server.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using HerStory.Server.Interfaces;
+using HerStory.Server.Repositories;
+using HerStory.Server.Models;
 
 
 namespace HerStory.Server.Controllers
@@ -89,6 +91,58 @@ namespace HerStory.Server.Controllers
             {
                 throw ex;
             }
+        }
+
+        [HttpGet("search")]
+        [ProducesResponseType(200, Type = typeof(ICollection<PortraitListDto>))]
+        public async Task<IActionResult> SearchPortraits([FromQuery] string term)
+        {
+            if (string.IsNullOrEmpty(term))
+            {
+                return BadRequest("Le terme de recherche est requis.");
+            }
+
+            try
+            {
+                var portraits = await _portraitService.SearchByTermAsync(term);
+                if (portraits == null || !portraits.Any())
+                {
+                    return NotFound("Aucun portrait trouvé pour ce terme.");
+                }
+
+                return Ok(portraits);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost("filtre")]
+        [ProducesResponseType(200, Type = typeof(ICollection<PortraitListDto>))]
+        public async Task<ActionResult<List<Portrait>>> FilterPortraitsAsync([FromBody] FilterCriteriaDto criteria)
+        {
+            if (criteria == null)
+            {
+                return BadRequest("Les critères de filtrage sont requis.");
+            }
+
+            try
+            {
+                var portraits = await _portraitService.FilterAsync(criteria);
+
+                if (portraits == null || !portraits.Any())
+                {
+                    return NotFound("Aucun portrait trouvé pour ces critères.");
+                }
+
+                return Ok(portraits);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
         }
     }
 }

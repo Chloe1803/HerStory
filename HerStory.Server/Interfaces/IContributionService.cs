@@ -13,5 +13,7 @@ namespace HerStory.Server.Interfaces
         public Task ChangeReviewerAssignment(bool isAssigned, Contribution contribution, AppUser user);
         public Task RejectContribution(ContributionReviewDto reviewDto, Contribution contribution, AppUser user);
         public Task AcceptContribution(ContributionReviewDto reviewDto, Contribution contribution, AppUser user);
+        public Task<ICollection<UserContributionListDto>> GetAllUserContribution(AppUser user);
+        public Task<UserContributionViewDto> GetUserContributionById(AppUser user, int id);
     }
 }

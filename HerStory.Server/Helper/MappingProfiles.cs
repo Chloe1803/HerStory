@@ -85,7 +85,29 @@ namespace HerStory.Server.Helper
                 .ForMember(dest => dest.Portrait, opt => opt.MapFrom(src => src.Portrait))
                 .ForMember(dest => dest.Contributor, opt => opt.MapFrom(src => src.Contributor))
                 .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.Details));
-               
+
+            CreateMap<Contribution, UserContributionListDto>()
+                .ForMember(dest => dest.ContributionId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.IsNewPortrait, opt => opt.MapFrom(src => src.PortraitId == null))
+                .ForMember(dest => dest.PortraitId, opt => opt.MapFrom(src => src.PortraitId))
+               //Si c'est un nouveau portrait il faut mapp a partir des détails de la contribution, si non c'est à partir du portrait
+               .ForMember(dest => dest.PortraitFirstName, opt => opt.MapFrom(src =>
+                    src.PortraitId == null
+                        ? src.Details.Where(d => d.FieldName == Enums.ContributionDetailFieldName.FirstName)
+                            .Select(d => d.NewValue)
+                            .FirstOrDefault()
+                     : src.Portrait!.FirstName))
+               .ForMember(dest => dest.PortraitLastName, opt => opt.MapFrom(src =>
+                    src.PortraitId == null
+                        ? src.Details.Where(d => d.FieldName == Enums.ContributionDetailFieldName.LastName)
+                            .Select(d => d.NewValue)
+                            .FirstOrDefault()
+                     : src.Portrait!.LastName));
+
+            CreateMap<Contribution, UserContributionViewDto>()
+               .ForMember(dest => dest.Portrait, opt => opt.MapFrom(src => src.Portrait))
+               .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.Details));
+
 
         }
     }

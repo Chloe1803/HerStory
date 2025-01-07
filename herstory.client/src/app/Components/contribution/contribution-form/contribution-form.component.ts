@@ -49,28 +49,37 @@ export class ContributionFormComponent implements OnInit {
       },
     });
 
+    
+
+
     this.initializeForm();
   }
 
   initializeForm(): void {
+    const selectedCategories = this.portraitData?.categories?.map(cat =>
+      this.availableCategories.find(c => c.id === cat.id) || cat
+    );
+
+    const selectedFields = this.portraitData?.fields?.map(field =>
+      this.availableFields.find(f => f.id === field.id) || field
+    );
+
     this.portraitForm = this.fb.group({
       firstName: [this.portraitData?.firstName || '', Validators.required],
       lastName: [this.portraitData?.lastName || '', Validators.required],
-      dateOfBirth: [this.portraitData?.dateOfBirth || '', Validators.required],
-      dateOfDeath: [this.portraitData?.dateOfDeath || ''],
+      dateOfBirth: [this.formatDateForInput(this.portraitData?.dateOfBirth) || '', Validators.required],
+      dateOfDeath: [this.formatDateForInput(this.portraitData?.dateOfDeath) || ''],
       biographyAbstract: [this.portraitData?.biographyAbstract || '', Validators.required],
       biographyFull: [this.portraitData?.biographyFull || '', Validators.required],
       photoUrl: [this.portraitData?.photoUrl || '', Validators.pattern(/https?:\/\/.+/)],
       countryOfBirth: [this.portraitData?.countryOfBirth || '', Validators.required],
       categories: this.fb.array(
-        this.portraitData?.categories?.length
-          ? this.portraitData.categories.map((cat: Category) => this.fb.control(cat, Validators.required))
-          : [this.fb.control(null, Validators.required)]  
+        selectedCategories?.map(cat => this.fb.control(cat, Validators.required)) ||
+        [this.fb.control(null, Validators.required)]
       ),
       fields: this.fb.array(
-        this.portraitData?.fields?.length
-          ? this.portraitData.fields.map((field: Field) => this.fb.control(field, Validators.required))
-          : [this.fb.control(null, Validators.required)]  
+        selectedFields?.map(field => this.fb.control(field, Validators.required)) ||
+        [this.fb.control(null, Validators.required)]
       ),
     });
 
@@ -148,4 +157,14 @@ export class ContributionFormComponent implements OnInit {
       this.fieldFormArray.removeAt(index);
     }
   }
+
+  formatDateForInput(date: Date | string | undefined): string {
+    if (!date) return '';
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
 }

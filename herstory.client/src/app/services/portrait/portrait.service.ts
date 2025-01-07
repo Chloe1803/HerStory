@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api/api.service';
-import { PortraitCard, PortraitDetail, Category, Field } from '../../interfaces/portrait';
+import { PortraitCard, PortraitDetail, Category, Field, FilterCriteria } from '../../interfaces/portrait';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +25,15 @@ export class PortraitService {
 
   getFields(): Observable<Field[]> {
     return this.http.get<Field[]>(this.api.apiUrl + '/Portrait/fields');
+  }
+
+  searchPortrait(term: string): Observable<PortraitCard[]> {
+    const params = new HttpParams().set('term', term);
+
+    return this.http.get<PortraitCard[]>(this.api.apiUrl + '/Portrait/search', { params });
+  }
+
+  getFilteredPortraits(criteria: FilterCriteria): Observable<PortraitCard[]> {
+    return this.http.post<PortraitCard[]>(`${this.api.apiUrl}/Portrait/filtre`, criteria);
   }
 }

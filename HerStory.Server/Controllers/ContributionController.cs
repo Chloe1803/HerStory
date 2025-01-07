@@ -241,7 +241,6 @@ namespace HerStory.Server.Controllers
 
             if (reviewDto == null)
                 return NotFound("Review not found");
-            Console.WriteLine("ReviewDto content: " + JsonSerializer.Serialize(reviewDto));
 
 
             var contribution = await _contributionService.GetContributionById(reviewDto.ContributionId);
@@ -254,7 +253,6 @@ namespace HerStory.Server.Controllers
             
             if (reviewDto.IsAccepted == false)
             {
-                Console.WriteLine("rejecting");
                 try
                 {
                    
@@ -270,7 +268,6 @@ namespace HerStory.Server.Controllers
                 }
             }else
             {
-                Console.WriteLine("accepting");
                 try
                 {
                     await _contributionService.AcceptContribution(reviewDto, contribution, user);
@@ -284,6 +281,74 @@ namespace HerStory.Server.Controllers
 
             return Ok();
 
+        }
+
+        [HttpGet("user")]
+        [Authorize(Roles = "Contributor, Reviewer, Admin, SuperAdmin")]
+        [ProducesResponseType(200, Type = typeof(ICollection<ContributionListDto>))]
+        public async Task<IActionResult> GetUserContributions()
+        {
+            var userIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            var user = await _userService.GetUserById(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            try
+            {
+                var contributions = await _contributionService.GetAllUserContribution(user);
+                if (contributions == null)
+                    return NotFound("No pending contributions not assigned");
+
+                return Ok(contributions);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet("user/{contributionId}")]
+        [Authorize(Roles = "Contributor, Admin, Reviewer, SuperAdmin")]
+        [ProducesResponseType(200, Type = typeof(ContributionViewDto))]
+        public async Task<IActionResult> GeUserContributionById(int contributionId)
+        {
+            var userIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            var user = await _userService.GetUserById(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            try
+            {
+                var contribution = await _contributionService.GetUserContributionById(user, contributionId);
+
+                if (contribution == null)
+                    return NotFound("Contribution not found");
+
+                return Ok(contribution);
+            }
+            catch (InvalidOperationException inex)
+            {
+                return BadRequest(inex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+           
         }
 
 

@@ -1,0 +1,133 @@
+<div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-8 px-6">
+  <h2 class="text-4xl font-bold text-purple-700 text-center mb-6">
+    Détails de la contribution
+  </h2>
+
+  <div>
+    <!-- Message si aucune donnée disponible -->
+    <div *ngIf="!userContribution">
+      <p class="text-center text-red-500">Aucune donnée trouvée pour cette contribution.</p>
+    </div>
+
+    <div class="mb-4 p-2 bg-gray-100 rounded-lg border border-gray-300">
+      <!-- Statut -->
+      <div class="md-2 flex flex-row">
+        <h3 class="text-lg font-bold text-purple-700">Statut : {{ status.getStatusInFrench(userContribution.status) }}</h3>
+      </div>
+
+      <!-- Commentaire de révision -->
+      <div *ngIf="userContribution.reviewComment">
+        <h3 class="text-lg font-bold text-purple-700">Commentaire de révision :</h3>
+        <p>{{ userContribution.reviewComment }}</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <!-- First Name -->
+      <div class="">
+        <h3 class="block text-lg font-bold text-purple-700 mb-2 field-label">Prénom :</h3>
+        <p class="text-lg" *ngIf="!isNewPortrait && userContribution.portrait">{{ userContribution.portrait!.firstName }}</p>
+        <p class="text-lg text-purple-700 italic" *ngIf="getContributionDetail(field.FirstName) as firstName">
+          <ng-container *ngIf="!isNewPortrait">[modification] </ng-container> {{ firstName }}
+        </p>
+      </div>
+
+      <!-- Last Name -->
+      <div class="">
+        <h3 class="block text-lg font-bold text-purple-700 mb-2 field-label">Nom :</h3>
+        <p class="text-lg" *ngIf="!isNewPortrait && userContribution.portrait">{{ userContribution.portrait.lastName }}</p>
+        <p class="text-lg text-purple-700 italic" *ngIf="getContributionDetail(field.LastName) as lastName">
+          <ng-container *ngIf="!isNewPortrait">[modification] </ng-container> {{ lastName }}
+        </p>
+      </div>
+
+      <!-- Date of Birth -->
+      <div class="mb-4">
+        <h3 class="block text-lg font-bold text-purple-700 mb-2 field-label">Date de naissance :</h3>
+        <p class="text-lg" *ngIf="!isNewPortrait && userContribution.portrait">{{ userContribution.portrait.dateOfBirth | date }}</p>
+        <p class="text-lg text-purple-700 italic" *ngIf="getContributionDetail(field.DateOfBirth) as dateOfBirth">
+          <ng-container *ngIf="!isNewPortrait">[modification] </ng-container> {{ dateOfBirth | date }}
+        </p>
+      </div>
+
+      <!-- Date of Death -->
+      <div class="mb-4">
+        <h3 class="block text-lg font-bold text-purple-700 mb-2 field-label">Date de décès :</h3>
+        <p class="text-lg" *ngIf="!isNewPortrait && userContribution.portrait">{{ userContribution.portrait.dateOfDeath | date }}</p>
+        <p class="text-lg text-purple-700 italic" *ngIf="getContributionDetail(field.DateOfDeath) as dateOfDeath">
+          <ng-container *ngIf="!isNewPortrait">[modification] </ng-container>{{ dateOfDeath | date }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Photo URL -->
+    <div class="mb-4">
+      <h3 class="block text-lg font-bold text-purple-700 mb-2 field-label">Photo :</h3>
+      <div class="original" *ngIf="!isNewPortrait && userContribution.portrait">
+        <div class="w-56 h-56 bg-purple-100 border-4 border-purple-300 rounded-lg overflow-hidden m-2">
+          <img class="object-cover w-full h-full" [src]="userContribution.portrait.photoUrl" alt="Portrait" *ngIf="userContribution.portrait.photoUrl" class="portrait-image">
+        </div>
+      </div>
+      <div class="userContribution" *ngIf="getContributionDetail(field.PhotoUrl) as photoUrl">
+        <div class="w-56 h-56 bg-purple-100 border-4 border-purple-300 rounded-lg overflow-hidden m-2">
+          <img [src]="photoUrl" alt="Proposed Portrait" class="portrait-image">
+        </div>
+        <p *ngIf="!isNewPortrait" class="text-purple-300 italic">[modification]</p>
+      </div>
+    </div>
+
+    <!-- Biography Abstract -->
+    <div class="mb-4">
+      <h3 class="block text-lg font-bold text-purple-700 mb-2 field-label">Résumé biographique :</h3>
+      <p class="text-lg" *ngIf="!isNewPortrait && userContribution.portrait">{{ userContribution.portrait.biographyAbstract }}</p>
+      <p class="text-lg text-purple-700 italic" *ngIf="getContributionDetail(field.BiographyAbstract) as biographyAbstract">
+        <ng-container *ngIf="!isNewPortrait">[modification] </ng-container> {{ biographyAbstract }}
+      </p>
+    </div>
+
+    <!-- Biography Full -->
+    <div class="mb-4">
+      <h3 class="block text-lg font-bold text-purple-700 mb-2 field-label">Biographie complète :</h3>
+      <p class="text-lg" *ngIf="!isNewPortrait && userContribution.portrait">{{ userContribution.portrait.biographyFull }}</p>
+      <p class="text-lg text-purple-700 italic" *ngIf="getContributionDetail(field.BiographyFull) as biographyFull">
+        <ng-container *ngIf="!isNewPortrait">[modification] </ng-container> {{ biographyFull }}
+      </p>
+    </div>
+
+    <!-- Country of Birth -->
+    <div class="mb-4">
+      <h3 class="block text-lg font-bold text-purple-700 mb-2 field-label">Pays de naissance :</h3>
+      <p class="text-lg" *ngIf="!isNewPortrait && userContribution.portrait">{{ userContribution.portrait.countryOfBirth }}</p>
+      <p class="text-lg text-purple-700 italic" *ngIf="getContributionDetail(field.CountryOfBirth) as countryOfBirth">
+        <ng-container *ngIf="!isNewPortrait">[modification] </ng-container> {{ countryOfBirth }}
+      </p>
+    </div>
+
+    <!-- Categories -->
+    <div class="mb-4">
+      <h3 class="block text-lg font-bold text-purple-700 mb-2 field-label">Catégories :</h3>
+      <ul class="list-disc list-inside text-lg" *ngIf="!isNewPortrait && userContribution.portrait?.categories">
+        <li *ngFor="let category of userContribution.portrait?.categories ?? []">{{ category.name }}</li>
+      </ul>
+      <ul class="list-disc list-inside text-lg text-purple-700 italic" *ngIf="getContributionDetail(field.Categories) as categories">
+        <ng-container *ngIf="!isNewPortrait">[modification] </ng-container>
+        <li *ngFor="let category of parseJsonArray(categories)">{{ category }}</li>
+      </ul>
+    </div>
+
+    <!-- Fields -->
+    <div class="mb-4">
+      <h3 class="block text-lg font-bold text-purple-700 mb-2 field-label">Domaines :</h3>
+      <ul class="list-disc list-inside text-lg" *ngIf="!isNewPortrait && userContribution.portrait?.fields">
+        <li *ngFor="let field of userContribution.portrait?.fields  ?? []">{{ field.name }}</li>
+      </ul>
+      <ul class="list-disc list-inside text-lg text-purple-700 italic" *ngIf="getContributionDetail(field.Fields) as fields">
+        <ng-container *ngIf="!isNewPortrait">[modification] </ng-container>
+        <li *ngFor="let field of parseJsonArray(fields)">{{ field }}</li>
+      </ul>
+    </div>
+
+
+  </div>
+</div>
+

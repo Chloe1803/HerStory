@@ -34,4 +34,8 @@ export interface Field {
   name: string;
 }
 
+export interface FilterCriteria {
+  categories: Category[];
+  fields: Field[];
+}
 

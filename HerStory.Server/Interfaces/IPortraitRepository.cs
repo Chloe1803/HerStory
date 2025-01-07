@@ -1,4 +1,5 @@
-﻿using HerStory.Server.Models;
+﻿using HerStory.Server.Dtos;
+using HerStory.Server.Models;
 
 namespace HerStory.Server.Interfaces
 {
@@ -12,5 +13,7 @@ namespace HerStory.Server.Interfaces
         Task<ICollection<Field>> GetFieldsByNamesAsync(ICollection<string> fieldNames);
         Task CreatePortrait(Portrait portrait);
         Task UpdatePortrait(Portrait portrait);
+        Task<ICollection<Portrait>> SearchByName(string term);
+        Task<ICollection<Portrait>> FilterByCategoryAndField(FilterCriteriaDto criteria);
     }
 }

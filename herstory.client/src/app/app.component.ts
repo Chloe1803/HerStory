@@ -95,5 +95,17 @@ export class AppComponent implements OnInit {
   navigateToNewContribution(): void {
     this.router.navigate(['new-contribution']);
   }
+
+  navigateToMyContributions(): void {
+    this.router.navigate(['my-contributions']);
+  }
+
+  navigateToSearch(): void {
+    this.router.navigate(['search']);
+  }
+
+  navigateToFilter(): void {
+    this.router.navigate(['filter']);
+  }
   
 }

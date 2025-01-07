@@ -1,7 +1,14 @@
 <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 mt-1 py-2 px-3">
 
-  <div class="flex flex-col items-center">
+  <div class="flex flex-col-reverse md:flex-row items-center md:items-stretch justify-center">
 
+    <!-- Colonne gauche : photo (affichée en bas sur mobile) -->
+    <div class="w-56 h-56 bg-purple-100 border-4 border-purple-300 rounded-lg overflow-hidden m-2 md:mr-6">
+      <img class="object-cover w-full h-full" [src]="portrait.photoUrl" alt="{{portrait.firstName}} {{portrait.lastName}}">
+    </div>
+
+    <!-- Colonne droite : informations (affichées en haut sur mobile) -->
+    <div class="flex flex-col justify-center items-center md:items-start my-auto h-full text-center md:text-left">
       <h2 class="text-4xl font-bold text-purple-700">
         {{portrait.firstName}} {{portrait.lastName}}
       </h2>
@@ -11,16 +18,47 @@
       <p *ngIf="isValidDateOfDeath(portrait.dateOfDeath)" class="text-gray-500 text-lg">
         Décédé(e) : {{portrait.dateOfDeath | date}}
       </p>
-  
-    <div class="w-56 h-56 bg-purple-100 border-4 border-purple-300 rounded-lg overflow-hidden m-2">
-      <img class="object-cover w-full h-full" [src]="portrait.photoUrl" alt="{{portrait.firstName}} {{portrait.lastName}}">
+      <p class="text-gray-500 text-lg">
+        Pays de naissance : {{portrait.countryOfBirth}}
+      </p>
     </div>
 
   </div>
 
+
+  <div class="mt-3 flex flex-wrap">
+    <!-- Colonne 1 : Domaines / Disciplines -->
+    <div *ngIf="portrait.fields.length > 0"
+         class="w-full md:w-1/2 ">
+      <h2 class="text-2xl font-semibold text-purple-700">Domaines / Disciplines :</h2>
+      <div class="flex flex-wrap gap-2">
+        <span *ngFor="let tag of portrait.fields"
+              class="text-s font-medium px-2.5 py-0.5 rounded"
+              [style.backgroundColor]="getColorField(tag.name)">
+          {{ tag.name }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Colonne 2 : Rôle / Profession -->
+    <div *ngIf="portrait.categories.length > 0"
+         class="w-full md:w-1/2 px-2">
+      <h2 class="text-2xl font-semibold text-purple-700">Rôle / Profession :</h2>
+      <div class="flex flex-wrap gap-2">
+        <span *ngFor="let tag of portrait.categories"
+              class="text-s font-medium px-2.5 py-0.5 rounded"
+              [style.backgroundColor]="getColorCat(tag.name)">
+          {{ tag.name }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+
+
   <!-- Section Résumé -->
   <div class="mt-3">
-    <h2 class="text-2xl font-semibold text-purple-700">Résumé</h2>
+    <h2 class="text-2xl font-semibold text-purple-700">Résumé :</h2>
     <p class="mt-2 text-gray-700">
       {{portrait.biographyAbstract}}
     </p>
@@ -28,7 +66,7 @@
 
   <!-- Section Biographie -->
   <div class="mt-5">
-    <h2 class="text-2xl font-semibold text-purple-700">Biographie</h2>
+    <h2 class="text-2xl font-semibold text-purple-700">Biographie :</h2>
     <p class="mt-2 text-gray-700">
       {{portrait.biographyFull}}
     </p>

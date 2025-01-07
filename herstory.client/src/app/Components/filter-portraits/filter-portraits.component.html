@@ -1,0 +1,63 @@
+<div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-8 px-6">
+  <h2 class="text-3xl font-bold text-purple-700 text-center mb-6">Filtrer les éléments</h2>
+  <!-- Formulaire de filtrage -->
+  <div class="mb-6">
+    <div class="filter-actions mt-6 flex gap-4 justify-center">
+      <!-- Bouton d'application des filtres -->
+      <button (click)="onApplyFilters()"
+              class="apply-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600">
+        Appliquer les filtres
+      </button>
+      <!-- Bouton de réinitialisation des filtres -->
+      <button (click)="onResetFilters()"
+              class="reset-btn bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
+        Réinitialiser
+      </button>
+    </div>
+    <h3 class="text-lg font-semibold text-purple-700 mb-4">Filtrer par rôle / profession :</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 px-4">
+      <div *ngFor="let category of selectedCategories">
+        <label>
+          <input type="checkbox" [(ngModel)]="category.selected" />
+          {{ category.category.name }} <!-- Affiche le nom de la catégorie -->
+        </label>
+      </div>
+    </div>
+    <!-- Boutons pour tout sélectionner / désélectionner -->
+    <div class="flex gap-4 my-4">
+      <button type="button"
+              (click)="selectAllCategories(true)"
+              class="bg-purple-500 text-white font-semibold py-1 px-4 rounded-lg hover:bg-purple-600">
+        Tout sélectionner
+      </button>
+      <button type="button"
+              (click)="selectAllCategories(false)"
+              class="bg-gray-300 text-gray-800 font-semibold py-1 px-4 rounded-lg hover:bg-gray-400">
+        Tout désélectionner
+      </button>
+    </div>
+
+    <h3 class="text-lg font-semibold text-purple-700 mb-4">Filtrer par domaine / discipline :</h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2   gap-2 px-4">
+      <div *ngFor="let field of selectedFields">
+        <label>
+          <input type="checkbox" [(ngModel)]="field.selected" />
+          {{ field.field.name }} <!-- Affiche le nom du champ -->
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-4 my-4">
+      <button type="button"
+              (click)="selectAllFields(true)"
+              class="bg-purple-500 text-white font-semibold py-1 px-4 rounded-lg hover:bg-purple-600">
+        Tout sélectionner
+      </button>
+      <button type="button"
+              (click)="selectAllFields(false)"
+              class="bg-gray-300 text-gray-800 font-semibold py-1 px-4 rounded-lg hover:bg-gray-400">
+        Tout désélectionner
+      </button>
+    </div>
+  </div>
+</div>

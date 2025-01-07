@@ -1,0 +1,39 @@
+<div class="search-container max-w-4xl mx-auto bg-white rounded-lg shadow-lg border-2 mb-6 border-purple-300 py-3 px-4 sm:py-8 sm:px-6">
+  <h2 class="text-2xl font-bold text-purple-700 text-center mb-4 sm:text-3xl sm:mb-6">Rechercher un portrait</h2>
+  <!-- Barre de recherche -->
+  <div class="flex items-center gap-2">
+    <input type="text"
+           placeholder="Entrer une recherche"
+           #searchInput
+           (keydown.enter)="onSearch(searchInput.value)"
+           class="flex-grow h-12 px-3 text-base sm:text-lg rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-400 outline-none" />
+    <button class="h-12 px-4 sm:px-6 text-base sm:text-lg font-semibold text-white bg-purple-500 rounded-lg hover:bg-purple-600 flex items-center justify-center"
+            (click)="onSearch(searchInput.value)">
+      <i class="bi bi-search-heart"></i>
+    </button>
+  </div>
+</div>
+
+
+
+<!-- Spinner ou message pendant le chargement -->
+<div *ngIf="loading" class="loading-indicator mt-6 max-w-4xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-6 px-4 text-center">
+  Recherche en cours...
+</div>
+
+<!-- Résultats -->
+<div *ngIf="!loading && resultPortraits.length > 0" class="results-container  max-w-4xl mx-auto">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 px-4 ">
+    <app-portrait-card *ngFor="let portrait of resultPortraits"
+                       [portrait]="portrait">
+    </app-portrait-card>
+  </div>
+</div>
+
+
+<!-- Message si aucun résultat -->
+<div *ngIf="!loading && resultPortraits.length === 0" class="no-results mt-6 max-w-4xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-6 px-4 text-center">
+  <p class="text-lg text-purple-700 font-semibold">Aucun résultat trouvé</p>
+</div>
+
+

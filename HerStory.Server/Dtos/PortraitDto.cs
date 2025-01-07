@@ -44,4 +44,10 @@ namespace HerStory.Server.Dtos
         public int Id { get; set; }
         public required string Name { get; set; }
     }
+
+    public class FilterCriteriaDto
+    {
+        public ICollection<CategoryDto> Categories { get; set; }
+        public ICollection<FieldDto> Fields { get; set; }
+    }
 }

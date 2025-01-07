@@ -16,6 +16,9 @@ import { ContributionManagementComponent } from './Components/contribution/contr
 import { ContributionFormComponent } from './Components/contribution/contribution-form/contribution-form.component';
 import { ContributionViewComponent } from './Components/contribution/contribution-view/contribution-view.component';
 import { ContributionActionComponent } from './Components/contribution/contribution-action/contribution-action.component';
+import { UserContributionListComponent } from './Components/contribution/user-contribution-list/user-contribution-list.component';
+import { UserContributionViewComponent } from './Components/contribution/user-contribution-view/user-contribution-view.component';
+import { FilterPortraitsComponent } from './Components/filter-portraits/filter-portraits.component';
 
 
 
@@ -31,6 +34,10 @@ import { ContributionActionComponent } from './Components/contribution/contribut
     ContributionFormComponent,
     ContributionViewComponent,
     ContributionActionComponent,
+    UserContributionListComponent,
+    UserContributionViewComponent,
+    FilterPortraitsComponent,
+ 
    
   ],
   imports: [

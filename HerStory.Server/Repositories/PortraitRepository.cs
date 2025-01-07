@@ -1,4 +1,5 @@
 ﻿using HerStory.Server.Data;
+using HerStory.Server.Dtos;
 using HerStory.Server.Interfaces;
 using HerStory.Server.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +19,38 @@ namespace HerStory.Server.Repositories
             try
             {
                 _context.Portrait.AddAsync(portrait);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 
             }catch (Exception ex)
             {
                 Console.WriteLine($"Unexpected error: {ex.Message}");
                 throw new Exception("An unexpected error occurred.", ex);
             }
+        }
+
+        public async Task<ICollection<Portrait>> FilterByCategoryAndField(FilterCriteriaDto criteria)
+        {
+            var query = _context.Portrait
+                .Include(p => p.PortraitCategories).ThenInclude(pc => pc.Category)
+                .Include(p => p.PortraitFields).ThenInclude(pf => pf.Field)
+                .AsQueryable();
+
+            // Filtrage par catégories
+            if (criteria.Categories != null && criteria.Categories.Any())
+            {
+                var categoryIds = criteria.Categories.Select(c => c.Id).ToList();
+                query = query.Where(p => p.PortraitCategories.Any(c => categoryIds.Contains(c.CategoryId)));
+            }
+
+            // Filtrage par champs
+            if (criteria.Fields != null && criteria.Fields.Any())
+            {
+                var fieldIds = criteria.Fields.Select(f => f.Id).ToList();
+                query = query.Where(p => p.PortraitFields.Any(p => fieldIds.Contains(p.FieldId)));
+            }
+
+            return await query.ToListAsync();
+
         }
 
         public async Task<ICollection<Portrait>> GetAllPortraitsAsync()
@@ -81,8 +107,11 @@ namespace HerStory.Server.Repositories
         {
             try
             {
-                if (fieldNames == null || fieldNames.Any())
+              
+                if (fieldNames == null || !fieldNames.Any())
+                {
                     return new List<Field>();
+                }
 
                 var fields = await  _context.Field
                     .Where(c => fieldNames.Contains(c.Name))
@@ -102,6 +131,16 @@ namespace HerStory.Server.Repositories
                 .Include(p => p.PortraitCategories).ThenInclude(pc => pc.Category)
                 .Include(p => p.PortraitFields).ThenInclude(pf => pf.Field)
                 .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<ICollection<Portrait>> SearchByName(string term)
+        {
+            return await _context.Portrait
+                .Include(p => p.PortraitCategories).ThenInclude(pc => pc.Category)
+                .Include(p => p.PortraitFields).ThenInclude(pf => pf.Field)
+                 .Where(p => p.FirstName.ToLower().Contains(term) ||
+                             p.LastName.ToLower().Contains(term))
+                 .ToListAsync();
         }
 
         public async Task UpdatePortrait(Portrait portrait)
