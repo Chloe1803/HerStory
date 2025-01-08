@@ -19,6 +19,8 @@ import { ContributionActionComponent } from './Components/contribution/contribut
 import { UserContributionListComponent } from './Components/contribution/user-contribution-list/user-contribution-list.component';
 import { UserContributionViewComponent } from './Components/contribution/user-contribution-view/user-contribution-view.component';
 import { FilterPortraitsComponent } from './Components/filter-portraits/filter-portraits.component';
+import { SpinnerComponent } from './Components/spinner/spinner.component';
+import { ErrorComponent } from './Components/error/error.component';
 
 
 
@@ -37,13 +39,15 @@ import { FilterPortraitsComponent } from './Components/filter-portraits/filter-p
     UserContributionListComponent,
     UserContributionViewComponent,
     FilterPortraitsComponent,
+    ErrorComponent,
+
  
    
   ],
   imports: [
     BrowserModule, HttpClientModule,
     AppRoutingModule,
-    BrowserAnimationsModule, ReactiveFormsModule, FormsModule
+    BrowserAnimationsModule, ReactiveFormsModule, FormsModule, SpinnerComponent
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },],
   bootstrap: [AppComponent]

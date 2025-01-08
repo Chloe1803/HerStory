@@ -228,7 +228,6 @@ namespace HerStory.Server.Services
         {
             if (string.IsNullOrWhiteSpace(categoriesAsString))
             {
-                portrait.PortraitCategories = new List<PortraitCategory>(); // Si la chaîne est vide, vider les relations
                 return;
             }
 
@@ -253,8 +252,6 @@ namespace HerStory.Server.Services
         {
             if (string.IsNullOrWhiteSpace(fieldsAsString))
             {
-                portrait.PortraitFields = new List<PortraitField>();
-          
                 return;
             }
          

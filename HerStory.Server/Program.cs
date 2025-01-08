@@ -117,6 +117,7 @@ app.Use(async (context, next) =>
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseRouting();
 app.UseCors("AllowAngular");
 
@@ -129,7 +130,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<NotificationHub>("/notifications"); // URL du hub
 });
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
+
 
 
 if (args.Length == 1 && args[0].ToLower() == "seeddata")

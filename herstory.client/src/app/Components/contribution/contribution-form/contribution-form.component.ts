@@ -17,12 +17,20 @@ export class ContributionFormComponent implements OnInit {
   editMode: boolean = false;
   portraitData: PortraitDetail | undefined;
   portraitForm!: FormGroup;
-  availableCategories: Category[] = []; 
-  availableFields: Field[] = []; 
+  // Toutes les categories et fields disponibles
+  availableCategories: string[] = []; 
+  availableFields: string[] = [];
+
+  //Categories et field du portrait
+  initialCategories: string[] = [];
+  initialFields: string[] = [];
+
   categoryFormArray!: FormArray<FormControl>;
   fieldFormArray!: FormArray<FormControl>;
   photoUrlValid: boolean = false;
   isPhotoTested = false;
+  isLoading = true;
+  errorMessage: string | null = null;
 
   constructor(private location: Location, private fb: FormBuilder, private portraitService: PortraitService, private contributionService: ContributionService, private router :Router) { }
 
@@ -33,19 +41,22 @@ export class ContributionFormComponent implements OnInit {
 
     this.portraitService.getCategories().subscribe({
       next: (categories) => {
-        this.availableCategories = categories;
+        this.availableCategories = categories.map(category => category.name);
       },
       error: (err) => {
         console.error('Erreur lors de la récupération des catégories:', err);
+        this.isLoading = false;
+        this.errorMessage = 'Une erreur est survenue.';
       },
     });
 
     this.portraitService.getFields().subscribe({
       next: (fields) => {
-        this.availableFields = fields;
+        this.availableFields = fields.map(field => field.name);
       },
       error: (err) => {
-        console.error('Erreur lors de la récupération des champs:', err);
+        this.isLoading = false;
+        this.errorMessage = 'Une erreur est survenue.';
       },
     });
 
@@ -53,16 +64,13 @@ export class ContributionFormComponent implements OnInit {
 
 
     this.initializeForm();
+    this.isLoading = false;
   }
 
   initializeForm(): void {
-    const selectedCategories = this.portraitData?.categories?.map(cat =>
-      this.availableCategories.find(c => c.id === cat.id) || cat
-    );
+    this.initialCategories = this.portraitData?.categories?.map(category => category.name) || [];
 
-    const selectedFields = this.portraitData?.fields?.map(field =>
-      this.availableFields.find(f => f.id === field.id) || field
-    );
+    this.initialFields = this.portraitData?.fields?.map(field => field.name) || [];
 
     this.portraitForm = this.fb.group({
       firstName: [this.portraitData?.firstName || '', Validators.required],
@@ -74,11 +82,11 @@ export class ContributionFormComponent implements OnInit {
       photoUrl: [this.portraitData?.photoUrl || '', Validators.pattern(/https?:\/\/.+/)],
       countryOfBirth: [this.portraitData?.countryOfBirth || '', Validators.required],
       categories: this.fb.array(
-        selectedCategories?.map(cat => this.fb.control(cat, Validators.required)) ||
+        this.initialCategories?.map(cat => this.fb.control(cat, Validators.required)) ||
         [this.fb.control(null, Validators.required)]
       ),
       fields: this.fb.array(
-        selectedFields?.map(field => this.fb.control(field, Validators.required)) ||
+        this.initialFields?.map(field => this.fb.control(field, Validators.required)) ||
         [this.fb.control(null, Validators.required)]
       ),
     });
@@ -104,10 +112,27 @@ export class ContributionFormComponent implements OnInit {
     const changes: any = {};
 
     Object.keys(this.portraitForm.controls).forEach((key) => {
-      if (this.portraitForm.controls[key].dirty) {
-        changes[key] = this.portraitForm.controls[key].value;
+      const control = this.portraitForm.controls[key];
+
+      if (control instanceof FormArray) {
+        const currentValue = control.value;
+        const initialValue = key === 'categories' ? this.initialCategories : this.initialFields;
+
+        // Vérifie si les valeurs ont changé
+        if (!this.areArraysEqual(currentValue, initialValue)) {
+          changes[key] = currentValue;
+        }
+      } else if (control.dirty) {
+        changes[key] = control.value;
       }
     });
+
+    if (Object.keys(changes).length === 0) {
+      console.warn('Aucun changement détecté. La soumission est annulée.');
+      alert('Veuillez effectuer des modifications avant de soumettre une nouvelle contribution');
+      return;
+    }
+
 
     const contribution: NewContribution = {
       changes: changes,
@@ -123,8 +148,9 @@ export class ContributionFormComponent implements OnInit {
       next: () => {
         this.router.navigate([''])
       },
-      error: () => {
-        console.error('Erreur lors de la soumission de la contribution:');
+      error: (err : Error) => {
+        console.error('Erreur lors de la soumission de la contribution:', err);
+        this.router.navigate(['error']);
       },
     });
     
@@ -132,10 +158,12 @@ export class ContributionFormComponent implements OnInit {
 
   getCategoryControl(index: number): FormControl {
     return this.categoryFormArray.at(index);
+    this.categoryFormArray.markAsDirty(); 
   }
 
   getfieldFormArray(index: number): FormControl {
     return this.fieldFormArray.at(index);
+    this.fieldFormArray.markAsDirty();
   }
 
   addCategory(): void {
@@ -167,4 +195,8 @@ export class ContributionFormComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
+  areArraysEqual(arr1: string[], arr2: string[]): boolean {
+    if (arr1.length !== arr2.length) return false;
+    return arr1.every((value, index) => value === arr2[index]);
+  }
 }

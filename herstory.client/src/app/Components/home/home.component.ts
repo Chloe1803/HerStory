@@ -5,17 +5,22 @@ import { PortraitCard } from '../../interfaces/portrait';
 import { PortraitService } from '../../services/portrait/portrait.service';
 import {FilterService } from '../../services/portrait/filter.service';
 import { FilterCriteria } from '../../interfaces/portrait';
+import { SpinnerComponent } from '../spinner/spinner.component';
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [PortraitCardComponent, CommonModule],
+  imports: [PortraitCardComponent, CommonModule, SpinnerComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
   portraits: PortraitCard[] = [];
   filters: FilterCriteria = { categories: [], fields: [] };
+  isLoading = true;
+  errorMessage: string | null = null;
+  noResultMessage: string | null = null;
   constructor(private portraitService: PortraitService, private filterService: FilterService) { }
 
   ngOnInit(): void {
@@ -23,9 +28,12 @@ export class HomeComponent {
       next: (criteria) => {
         this.filters = criteria;
         this.loadPortraits();
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('Erreur lors de la récupération des filtres:', err);
+        this.isLoading = false;
+        this.errorMessage = "Une erreur est survenue";
       },
     });
   }
@@ -38,9 +46,12 @@ export class HomeComponent {
       this.portraitService.getPortraits().subscribe({
         next: (portraits) => {
           this.portraits = portraits;
+          this.isLoading = false;
         },
         error: (err) => {
           console.error('Erreur lors de la récupération des portraits:', err);
+          this.isLoading = false;
+          this.errorMessage = "Une erreur est survenue";
         },
       });
     } else {
@@ -48,11 +59,24 @@ export class HomeComponent {
       this.portraitService.getFilteredPortraits(this.filters).subscribe({
         next: (filteredPortraits) => {
           this.portraits = filteredPortraits;
+          this.isLoading = false;
+          if (this.portraits.length == 0) {
+            this.noResultMessage = "Aucun portrait ne correspond aux filtres"
+          }
         },
         error: (err) => {
           console.error('Erreur lors de la récupération des portraits filtrés:', err);
+          this.isLoading = false;
+          this.noResultMessage = "Aucun portrait ne correspond aux filtres"
         },
       });
     }
+  }
+
+  resetFilters() {
+    this.noResultMessage = null;
+    this.isLoading = true;
+    this.filterService.resetFilters();
+    this.loadPortraits();
   }
 }

@@ -1,4 +1,8 @@
-<div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 mt-1 py-2 px-3">
+<app-spinner *ngIf="isLoading"></app-spinner>
+
+<p *ngIf="errorMessage" class="text-center text-lg">{{errorMessage}}</p>
+
+<div *ngIf="!isLoading && errorMessage==null" class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 mt-1 py-2 px-3">
 
   <div class="flex flex-col-reverse md:flex-row items-center md:items-stretch justify-center">
 

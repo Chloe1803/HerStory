@@ -1,4 +1,8 @@
-<div class="container">
+<app-spinner *ngIf="isLoading"></app-spinner>
+
+<p *ngIf="errorMessage" class="text-center text-lg">{{errorMessage}}</p>
+
+<div *ngIf="!isLoading && errorMessage==null" class="container">
   <h2 class="title">Contributions en attentes</h2>
 
   <div>

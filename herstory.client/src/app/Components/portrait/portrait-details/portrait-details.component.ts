@@ -5,6 +5,7 @@ import { PortraitService } from '../../../services/portrait/portrait.service';
 import { AuthService } from '../../../services/authentification/auth.service';
 import { TagColorMapping } from '../../../constants/category-field';
 
+
 @Component({
   selector: 'app-portrait-details',
   templateUrl: './portrait-details.component.html',
@@ -13,7 +14,8 @@ import { TagColorMapping } from '../../../constants/category-field';
 export class PortraitDetailsComponent {
   portrait!: PortraitDetail;
   portraitId: number | undefined;
-
+  isLoading = true;
+  errorMessage: string | null = null;
   constructor(private portraitService: PortraitService, private route: ActivatedRoute, private router : Router ,private authService: AuthService) { }
 
   ngOnInit(): void {
@@ -23,9 +25,12 @@ export class PortraitDetailsComponent {
       this.portraitService.getPortraitById(this.portraitId).subscribe({
         next: (portrait) => {
           this.portrait = portrait;
+          this.isLoading = false;
         },
         error: (err) => {
           console.error('Erreur lors de la récupération du portrait:', err);
+          this.isLoading = false;
+          this.errorMessage = "Une erreur est survenue";
         },
       });
     }

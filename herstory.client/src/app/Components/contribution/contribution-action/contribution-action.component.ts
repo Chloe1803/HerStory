@@ -26,9 +26,9 @@ export class ContributionActionComponent {
         this.config.isReview = true;
         this.sendConfigUpdate();
       },
-      error: () =>{
-        console.error("Erreur lors de l'affectation ");      
-        this.router.navigate(['contribution-management']);
+      error: (err: Error) => {
+        console.error("Erreur lors de l'affectation :", err);      
+        this.router.navigate(['error']);
       }
     })
   }
@@ -64,9 +64,9 @@ export class ContributionActionComponent {
         next: () => {
           this.router.navigate(['contribution-management']);
         },
-        error: () => {
-          console.error("Erreur lors de l'affectation ");
-          this.router.navigate(['contribution-management']);
+        error: (err : Error) => {
+          console.error("Erreur lors de l'affectation :", err);
+          this.router.navigate(['error']);
         }
       })
     }

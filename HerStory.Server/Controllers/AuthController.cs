@@ -32,7 +32,7 @@ namespace HerStory.Server.Controllers
                 {
                     _logger.LogWarning("Invalid login request: missing email or password.");
 
-                    throw new BadRequestException("Email and password are required.");
+                    throw new BadRequestException("Email et mot de passe sont requis");
                 }
 
                 var authResult = await _userService.AuthenticateAsync(loginDto.Email, loginDto.Password);
@@ -41,11 +41,10 @@ namespace HerStory.Server.Controllers
                 {
 
                     if (authResult.ErrorMessage == "User not found.")
-                        return NotFound(new { message = "User with this email does not exist." });
+                        return NotFound(new { message = "Adresse email inconnue" });
 
                     if (authResult.ErrorMessage == "Invalid password.")
-                        throw new UnauthorizedException("Incorrect password.");
-
+                        return Unauthorized(new { message = "Mot de passe incorrect" });
 
                     return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred.");
                 }

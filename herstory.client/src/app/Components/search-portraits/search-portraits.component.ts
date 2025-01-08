@@ -3,17 +3,21 @@ import { CommonModule } from '@angular/common';
 import { PortraitCardComponent } from '../portrait/portrait-card/portrait-card.component';
 import { PortraitCard } from '../../interfaces/portrait';
 import { PortraitService } from '../../services/portrait/portrait.service';
+import { SpinnerComponent } from '../spinner/spinner.component';
+import { HttpErrorResponse } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-search-portraits',
   standalone: true,
-  imports: [PortraitCardComponent, CommonModule],
+  imports: [PortraitCardComponent, CommonModule, SpinnerComponent],
   templateUrl: './search-portraits.component.html',
   styleUrl: './search-portraits.component.css'
 })
 export class SearchPortraitsComponent {
   resultPortraits: PortraitCard[] = [];
-  loading = false;
+  isLoading = false;
+  errorMessage: string | null = null;
   constructor(private portraitService: PortraitService) { }
 
   onSearch(term: string) {
@@ -22,16 +26,20 @@ export class SearchPortraitsComponent {
       return;
     }
 
-    this.loading = true;
+    this.isLoading = true;
 
     this.portraitService.searchPortrait(term).subscribe({
       next: (portraits) => {
         this.resultPortraits = portraits;
-        this.loading = false;
+        this.isLoading = false;
       },
-      error: () => {
+      error: (error: HttpErrorResponse) => {
         this.resultPortraits = [];
-        this.loading = false;
+        this.isLoading = false;
+
+        if (error.status !== 404) {
+          this.errorMessage = "Une erreur est survenue. Veuillez réessayer plus tard.";
+        }
       }
     });
   }

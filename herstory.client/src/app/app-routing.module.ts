@@ -17,6 +17,7 @@ import { UserContributionListComponent } from './Components/contribution/user-co
 import { UserContributionViewComponent } from './Components/contribution/user-contribution-view/user-contribution-view.component';
 import { SearchPortraitsComponent } from './Components/search-portraits/search-portraits.component';
 import { FilterPortraitsComponent } from './Components/filter-portraits/filter-portraits.component';
+import { ErrorComponent } from './Components/error/error.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,9 @@ const routes: Routes = [
   },
   {
     path: 'search', component: SearchPortraitsComponent
+  },
+  {
+    path: 'error', component: ErrorComponent
   },
   {
     path:'filter', component: FilterPortraitsComponent 

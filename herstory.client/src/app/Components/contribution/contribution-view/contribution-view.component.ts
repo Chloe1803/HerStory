@@ -16,6 +16,8 @@ export class ContributionViewComponent {
   config!: ContributionViewConfig;
   contribution !: Contribution;
   field = ContributionDetailFieldName;
+  isLoading = true;
+  errorMessage: string | null = null;
   constructor(private contributionService: ContributionService, private location: Location, private router : Router) { }
 
   ngOnInit() {
@@ -26,9 +28,12 @@ export class ContributionViewComponent {
     this.contributionService.getContribution(this.config.id).subscribe({
       next: (data) => {
         this.contribution = data;
+        this.isLoading = false;
       },
       error: (err) => {
         console.log(err)
+        this.isLoading = false;
+        this.errorMessage = "Une erreur est survenue";
       }
     });
   }

@@ -17,12 +17,10 @@
 
 
 <!-- Spinner ou message pendant le chargement -->
-<div *ngIf="loading" class="loading-indicator mt-6 max-w-4xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-6 px-4 text-center">
-  Recherche en cours...
-</div>
+<app-spinner *ngIf="isLoading"></app-spinner>
 
 <!-- Résultats -->
-<div *ngIf="!loading && resultPortraits.length > 0" class="results-container  max-w-4xl mx-auto">
+<div *ngIf="!isLoading && resultPortraits.length > 0" class="results-container  max-w-4xl mx-auto">
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 px-4 ">
     <app-portrait-card *ngFor="let portrait of resultPortraits"
                        [portrait]="portrait">
@@ -32,8 +30,10 @@
 
 
 <!-- Message si aucun résultat -->
-<div *ngIf="!loading && resultPortraits.length === 0" class="no-results mt-6 max-w-4xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-6 px-4 text-center">
+<div *ngIf="!isLoading && resultPortraits.length === 0 && errorMessage == null" class="no-results mt-6 max-w-4xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-6 px-4 text-center">
   <p class="text-lg text-purple-700 font-semibold">Aucun résultat trouvé</p>
 </div>
+
+<p *ngIf="errorMessage" class="text-center text-lg">{{errorMessage}}</p>
 
 

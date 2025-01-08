@@ -1,4 +1,8 @@
-<div class="container">
+<app-spinner *ngIf="isLoading"></app-spinner>
+
+<p *ngIf="errorMessage" class="text-center text-lg">{{errorMessage}}</p>
+
+<div *ngIf="!isLoading && errorMessage==null" class="container">
   <h2 class="title">Mes Contributions</h2>
 
   <div class="table-container">

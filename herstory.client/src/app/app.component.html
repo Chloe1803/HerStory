@@ -5,7 +5,7 @@
       <div class="flex items-center space-x-2 mr-2">
         <button *ngIf="isHomeRoute && !isMobile" class="btn btn-outline-light" (click)="navigateToFilter()"><i class="bi bi-funnel"></i></button>
         <button class="btn btn-outline-light" *ngIf="!isMobile" (click)="navigateToSearch()"><i class="bi bi-search-heart"></i></button>
-        <button *ngIf="isAuthenticated" class="btn btn-outline-light"><i class="bi bi-bell"></i></button>
+        <!--<button *ngIf="isAuthenticated" class="btn btn-outline-light"><i class="bi bi-bell"></i></button>-->
         <div class="dropdown" *ngIf="isAuthenticated&&autorizeContributorAndUp()">
           <button class="btn btn-outline-light " *ngIf="!isMobile" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-list"></i></button>
 

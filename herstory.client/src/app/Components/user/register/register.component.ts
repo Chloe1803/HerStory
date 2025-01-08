@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/authentification/auth.service';
 import { RegisterUser } from '../../../interfaces/user';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -45,9 +46,15 @@ export class RegisterComponent implements OnInit {
         next: () => {
           this.router.navigate(['']); 
         },
-        error: (err) => {
-          this.errorMessage = err.error.message || 'Une erreur est survenue. Veuillez réessayer.';
-        }
+        error: (err: HttpErrorResponse) => {
+          if (err.status === 409) {
+            // Message pour une mauvaise requête (Bad Request)
+            this.errorMessage = 'Cette adresse email est déjà utilisée';
+          } else {
+            // Pour d'autres erreurs, rediriger vers la page d'erreur
+            this.router.navigate(['/error']);
+          }
+        },
       });
     }
   }

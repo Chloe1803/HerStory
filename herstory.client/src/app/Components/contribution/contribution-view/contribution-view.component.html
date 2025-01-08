@@ -1,4 +1,9 @@
-<div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-8 px-6">
+<app-spinner *ngIf="isLoading"></app-spinner>
+
+<p *ngIf="errorMessage" class="text-center text-lg">{{errorMessage}}</p>
+
+
+<div *ngIf="!isLoading && errorMessage==null" class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-8 px-6">
   <h2 *ngIf="config.isNewPortrait" class="text-4xl font-bold text-purple-700 text-center mb-6">
     {{ config.isReview ? 'Nouveau portrait en attente de relecture' :  'Nouveau portrait en attente d\'un relecteur'}}
   </h2>
@@ -121,7 +126,7 @@
     </div>
   </div>
 
-  <app-contribution-action [config]="config" (updateConfig)="updateConfig($event)" ></app-contribution-action>
+  <app-contribution-action [config]="config" (updateConfig)="updateConfig($event)"></app-contribution-action>
 
 
 </div>

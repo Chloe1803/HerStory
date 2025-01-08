@@ -57,10 +57,12 @@ namespace HerStory.Server.Repositories
         {
             try
             {
-                return await _context.Portrait
-                .Include(p => p.PortraitCategories).ThenInclude(pc => pc.Category)
-                .Include(p => p.PortraitFields).ThenInclude(pf => pf.Field)
-                .ToListAsync();
+                var portraits = await _context.Portrait
+                    .Include(p => p.PortraitCategories).ThenInclude(pc => pc.Category)
+                    .Include(p => p.PortraitFields).ThenInclude(pf => pf.Field)
+                    .ToListAsync();
+
+                return portraits.OrderBy(_ => Guid.NewGuid()).ToList();
             }
             catch (Exception ex)
             {

@@ -15,7 +15,14 @@
       </button>
     </div>
     <h3 class="text-lg font-semibold text-purple-700 mb-4">Filtrer par rôle / profession :</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 px-4">
+
+    <!--Spinner et message d'erreur-->
+    <app-spinner *ngIf="isLoadingCategories"></app-spinner>
+
+    <p *ngIf="errorMessageCategories" class="text-center text-lg">{{errorMessageCategories}}</p>
+
+    <!--liste des catégories-->
+    <div *ngIf="!isLoadingCategories && errorMessageCategories==null" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 px-4">
       <div *ngFor="let category of selectedCategories">
         <label>
           <input type="checkbox" [(ngModel)]="category.selected" />
@@ -38,8 +45,12 @@
     </div>
 
     <h3 class="text-lg font-semibold text-purple-700 mb-4">Filtrer par domaine / discipline :</h3>
+    <!--Spinner et message d'erreur-->
+    <app-spinner *ngIf="isLoadingFields"></app-spinner>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2   gap-2 px-4">
+    <p *ngIf="errorMessageFields" class="text-center text-lg">{{errorMessageFields}}</p>
+
+    <div *ngIf="!isLoadingFields && errorMessageFields==null" class="grid grid-cols-1 sm:grid-cols-2   gap-2 px-4">
       <div *ngFor="let field of selectedFields">
         <label>
           <input type="checkbox" [(ngModel)]="field.selected" />

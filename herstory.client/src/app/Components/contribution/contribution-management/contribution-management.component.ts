@@ -14,13 +14,15 @@ declare var bootstrap: any;
 export class ContributionManagementComponent {
   userPendingReviews: ContributionList[] = [];
   unassignedPendingReviews: ContributionList[] = [];
-
+  isLoading = true;
+  errorMessage: string | null = null;
 
   constructor(private router: Router, private contributionService: ContributionService) { }
 
   ngOnInit() {
     this.getunassignedPendingReviews();
     this.getUserPendingReviews();
+    this.isLoading = false;
   }
 
   getUserPendingReviews() {
@@ -30,6 +32,8 @@ export class ContributionManagementComponent {
       },
       error: (err) => {
         console.log(err)
+        this.isLoading = false;
+        this.errorMessage = "Une erreur est survenue";
       }
     })
   }
@@ -41,6 +45,8 @@ export class ContributionManagementComponent {
       },
       error: (err) => {
         console.log(err)
+        this.isLoading = false;
+        this.errorMessage = "Une erreur est survenue";
       }
     })
   }

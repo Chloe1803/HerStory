@@ -12,6 +12,8 @@ import { StatusConstants } from '../../../constants/contribution-status';
 export class UserContributionListComponent implements OnInit {
   userContributions: UserContributionList[] = [];
   status = StatusConstants;
+  isLoading = true;
+  errorMessage: string | null = null;
 
   constructor(
     private contributionService: ContributionService,
@@ -22,10 +24,12 @@ export class UserContributionListComponent implements OnInit {
     this.contributionService.getAllUserContribution().subscribe({
       next: (data) => {
         this.userContributions = data;
-        console.log(this.userContributions);
+        this.isLoading = false;
       },
-      error: () => {
-        console.log("Une erreur est survenue");
+      error: (err : Error) => {
+        console.log("Une erreur est survenue  :", err);
+        this.isLoading = false;
+        this.errorMessage = "Une erreur est survenue";
       },
     });
   }

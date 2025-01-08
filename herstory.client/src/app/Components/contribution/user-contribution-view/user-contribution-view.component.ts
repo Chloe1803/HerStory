@@ -16,6 +16,8 @@ export class UserContributionViewComponent implements OnInit {
   isNewPortrait = true;
   field = ContributionDetailFieldName;
   status = StatusConstants;
+  isLoading = true;
+  errorMessage: string | null = null;
 
   constructor(
     private userContributionService: ContributionService,
@@ -40,9 +42,12 @@ export class UserContributionViewComponent implements OnInit {
         if (this.userContribution.portrait) {
           this.isNewPortrait = false;
         }
+        this.isLoading = false;
       },
       error: (err : Error) => {
         console.error(err);
+        this.isLoading = false;
+        this.errorMessage = "Une erreur est survenue";
       }
     });
   }

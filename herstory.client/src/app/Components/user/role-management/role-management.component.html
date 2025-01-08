@@ -1,7 +1,11 @@
 <div class="container">
   <h2 class="title">Demandes de changement de rôle en attente</h2>
 
-  <div class="table-container">
+  <app-spinner *ngIf="isLoading"></app-spinner>
+
+  <p *ngIf="errorMessage" class="text-center text-lg">{{errorMessage}}</p>
+
+  <div *ngIf="!isLoading && errorMessage==null" class="table-container">
     <table class="custom-table">
       <thead>
         <tr>

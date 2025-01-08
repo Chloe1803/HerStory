@@ -13,6 +13,10 @@ import {Router } from '@angular/router'
 export class FilterPortraitsComponent implements OnInit {
   categories: Category[] = [];
   fields: Field[] = [];
+  isLoadingCategories = true;
+  isLoadingFields = true;
+  errorMessageCategories: string | null = null;
+  errorMessageFields: string | null = null;
   selectedCategories: { category: Category, selected: boolean }[] = [];
   selectedFields: { field: Field, selected: boolean }[] = [];
 
@@ -23,21 +27,38 @@ export class FilterPortraitsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Récupérer les catégories et les champs dès l'initialisation du composant
-    this.portraitService.getCategories().subscribe((categories) => {
-      this.categories = categories;
-      this.selectedCategories = categories.map(category => ({
-        category: category,
-        selected: true
-      }));
+    // Récupérer les catégories
+    this.portraitService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+        this.selectedCategories = categories.map(category => ({
+          category: category,
+          selected: true
+        }));
+        this.isLoadingCategories = false;
+      },
+      error: (err) => {
+        this.errorMessageCategories = 'Erreur lors du chargement des catégories.';
+        this.isLoadingCategories = false;
+        console.error('Erreur:', err);
+      }
     });
 
-    this.portraitService.getFields().subscribe((fields) => {
-      this.fields = fields;
-      this.selectedFields = fields.map(field => ({
-        field: field,
-        selected: true
-      }));
+    // Récupérer les champs
+    this.portraitService.getFields().subscribe({
+      next: (fields) => {
+        this.fields = fields;
+        this.selectedFields = fields.map(field => ({
+          field: field,
+          selected: true
+        }));
+        this.isLoadingFields = false;
+      },
+      error: (err) => {
+        this.errorMessageFields = 'Erreur lors du chargement des champs.';
+        this.isLoadingFields = false;
+        console.error('Erreur:', err);
+      }
     });
   }
 
@@ -48,14 +69,20 @@ export class FilterPortraitsComponent implements OnInit {
     const selectedCategories = this.selectedCategories.filter(c => c.selected).map(c => c.category);
     const selectedFields = this.selectedFields.filter(f => f.selected).map(f => f.field);
 
+    // Vérifie si tous les champs et catégories sont sélectionnés
+    const allCategoriesSelected = selectedCategories.length === this.categories.length;
+    const allFieldsSelected = selectedFields.length === this.fields.length;
+
+    // Si tout est sélectionné, ignore les filtres
     const criteria: FilterCriteria = {
-      categories: selectedCategories,
-      fields: selectedFields
+      categories: allCategoriesSelected ? [] : selectedCategories,
+      fields: allFieldsSelected ? [] : selectedFields
     };
 
     this.filterService.applyFilters(criteria);
     this.navigateToHome();
   }
+
 
   // Réinitialise les filtres sélectionnés
   onResetFilters(): void {

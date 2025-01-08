@@ -12,15 +12,31 @@ import { RoleConstants, RoleName } from '../../../constants/role-constants';
 export class ProfileComponent {
   profile!: ProfileUser;
   RoleConstants = RoleConstants;
+  isLoading = true;
+  errorMessage: string | null = null;
   constructor(private authService: AuthService, private userService: UserService) { }
 
   ngOnInit(): void {
     this.getProfile();
   }
 
-  getProfile() {
-    this.userService.getProfile().subscribe((profile: ProfileUser) => {
-      this.profile = profile;
+  getProfile(): void {
+    this.isLoading = true;  // Début du chargement
+    this.errorMessage = null; // Réinitialiser le message d'erreur à chaque nouvelle requête
+
+    this.userService.getProfile().subscribe({
+      next: (profile) => {
+        this.profile = profile;  // Assignation du profil récupéré
+        this.isLoading = false;  // Fin du chargement
+      },
+      error: (err) => {
+        this.isLoading = false;  // Fin du chargement
+        if (err.status === 404) {
+          this.errorMessage = "Profil non trouvé";  // Message d'erreur spécifique
+        } else {
+          this.errorMessage = "Une erreur est survenue";  // Message d'erreur générique
+        }
+      }
     });
   }
   
