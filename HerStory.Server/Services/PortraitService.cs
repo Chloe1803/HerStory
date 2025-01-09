@@ -103,7 +103,7 @@ namespace HerStory.Server.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Echec de l'ajout de catégorie et fields : {ex.Message}");
-                throw ex;
+                throw;
             }
 
             try
@@ -113,7 +113,7 @@ namespace HerStory.Server.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Une erreur est survenue lors de la création du portrait : {ex.Message}");
-                throw ex;
+                throw;
             }
 
             try
@@ -125,7 +125,7 @@ namespace HerStory.Server.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Une erreur est survenue lors de la mise à jour de la contribution avec l'id du portrait créer : {ex.Message}");
-                throw ex;
+                throw;
             }
 
 
@@ -219,7 +219,7 @@ namespace HerStory.Server.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Une erreur est survenue : {ex.Message}");
-                throw ex;
+                throw;
             }
 
         }
@@ -279,31 +279,17 @@ namespace HerStory.Server.Services
         {
             term = term.ToLower();
 
-            try
-            {
-                var portrait = await _portraitRepository.SearchByName(term);
+            var portrait = await _portraitRepository.SearchByName(term);
 
-                return _mapper.Map<ICollection<PortraitListDto>>(portrait);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Une erreur est survenue : {ex.Message}");
-                throw ex;
-            }
+            return _mapper.Map<ICollection<PortraitListDto>>(portrait);
+ 
         }
 
         public async Task<ICollection<PortraitListDto>> FilterAsync(FilterCriteriaDto criteria)
         {
-            try
-            {
-                var portrait = await _portraitRepository.FilterByCategoryAndField(criteria);
-                return _mapper.Map<ICollection<PortraitListDto>>(portrait);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Une erreur est survenue : {ex.Message}");
-                throw ex;
-            }
+            var portrait = await _portraitRepository.FilterByCategoryAndField(criteria);
+            return _mapper.Map<ICollection<PortraitListDto>>(portrait);
+
         }
     }
 }

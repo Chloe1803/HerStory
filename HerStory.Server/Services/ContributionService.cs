@@ -122,16 +122,10 @@ namespace HerStory.Server.Services
 
         public async Task<ICollection<UserContributionListDto>> GetAllUserContribution(AppUser user)
         {
-            try
-            {
-                var contributions = await _contributionRepository.GetAllUserContributions(user);
-                return _mapper.Map<ICollection<UserContributionListDto>>(contributions);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Service error: {ex.Message}");
-                throw ex;
-            }
+            var contributions = await _contributionRepository.GetAllUserContributions(user);
+            return _mapper.Map<ICollection<UserContributionListDto>>(contributions);
+            
+         
         }
 
         public async Task<Contribution> GetContributionById(int id)
@@ -163,38 +157,21 @@ namespace HerStory.Server.Services
 
         public async Task<UserContributionViewDto> GetUserContributionById(AppUser user, int id)
         {
-            try
-            {
-                var contribution = await _contributionRepository.GetContributionById(id);
-                if (contribution.ContributorId != user.Id)
-                    throw new InvalidOperationException("User is not the author of the contribution");
+            var contribution = await _contributionRepository.GetContributionById(id);
+            if (contribution.ContributorId != user.Id)
+                 throw new InvalidOperationException("User is not the author of the contribution");
 
-                return _mapper.Map<UserContributionViewDto>(contribution);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Service error: {ex.Message}");
-                throw ex;
-            }
+            return _mapper.Map<UserContributionViewDto>(contribution);
+
         }
 
         public async Task RejectContribution(ContributionReviewDto reviewDto, Contribution contribution, AppUser user)
         {
-            try
-            {
-                contribution.Status = ContributionStatus.Rejected;
-                contribution.ReviewedAt = DateTime.Now;
-                contribution.ReviewComment = reviewDto.Comment;
+            contribution.Status = ContributionStatus.Rejected;
+            contribution.ReviewedAt = DateTime.Now;
+            contribution.ReviewComment = reviewDto.Comment;
 
-                await _contributionRepository.UpdateContribution(contribution);       
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Service error: {ex.Message}");
-                throw new Exception("An error occurred while accepting the contribution.", ex);
-            }
-
+            await _contributionRepository.UpdateContribution(contribution);       
 
         }
     }

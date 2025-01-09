@@ -66,23 +66,9 @@ namespace HerStory.Server.Repositories
 
         public async Task UpdateContribution(Contribution contribution)
         {
-            try
-            {
-                _context.Update(contribution);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException ex)
-            {
-                // Journaliser les erreurs liées à la base de données
-                Console.WriteLine($"Database update error: {ex.Message}");
-                throw new Exception("An error occurred while updating the contribution in the database.", ex);
-            }
-            catch (Exception ex)
-            {
-                // Journaliser toute autre exception inattendue
-                Console.WriteLine($"Unexpected error: {ex.Message}");
-                throw new Exception("An unexpected error occurred.", ex);
-            }
+            _context.Update(contribution);
+            await _context.SaveChangesAsync();
+
         }
 
     }

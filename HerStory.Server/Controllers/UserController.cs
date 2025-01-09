@@ -21,21 +21,29 @@ namespace HerStory.Server.Controllers
         [ProducesResponseType(200, Type = typeof(ProfileDto))]
         public async Task<IActionResult> GetProfile()
         {
-            var userIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
-
-            if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
+            try
             {
-                return Unauthorized("User ID not found in token.");
+                var userIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+
+                if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
+                {
+                    return Unauthorized("User ID not found in token.");
+                }
+
+                var profile = await _userService.GetProfileAsync(userId);
+
+                if (profile == null)
+                {
+                    return NotFound("User not found.");
+                }
+
+                return Ok(profile);
             }
-
-            var profile = await _userService.GetProfileAsync(userId);
-
-            if (profile == null)
+            catch
             {
-                return NotFound("User not found.");
+                throw;
             }
-
-            return Ok(profile);
+           
         }
     }
 }

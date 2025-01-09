@@ -44,9 +44,9 @@ namespace HerStory.Server.Controllers
 
                 return Ok(contribution);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             
         }
@@ -80,9 +80,9 @@ namespace HerStory.Server.Controllers
 
                 return Ok();
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -112,9 +112,9 @@ namespace HerStory.Server.Controllers
 
                 return Ok(contributions);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -144,9 +144,9 @@ namespace HerStory.Server.Controllers
 
                 return Ok(contributions);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -189,10 +189,9 @@ namespace HerStory.Server.Controllers
 
                 return Ok();
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine("An error occured during reviewer assignent:", ex);
-                throw ex;
+                throw;
             }
 
             
@@ -234,10 +233,9 @@ namespace HerStory.Server.Controllers
 
                 return Ok();
             }
-             catch (Exception ex)
+             catch 
             {
-                Console.WriteLine("An error occured during reviewer assignent:", ex);
-                throw ex;
+                throw ;
             }          
 
            
@@ -300,9 +298,9 @@ namespace HerStory.Server.Controllers
 
                 return Ok();
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             
 
@@ -332,9 +330,9 @@ namespace HerStory.Server.Controllers
 
                 return Ok(contributions);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -367,9 +365,9 @@ namespace HerStory.Server.Controllers
             {
                 return BadRequest(inex);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
            
         }

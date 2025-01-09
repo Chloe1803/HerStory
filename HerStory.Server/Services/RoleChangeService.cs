@@ -97,8 +97,7 @@ namespace HerStory.Server.Services
 
         public async Task<RoleChange> RequestRoleChange(AppUser user, int RequestedRoleId)
         {
-            Console.WriteLine($"User : {user?.Id} RequestedRoleId : {RequestedRoleId}");
-
+ 
             try
             {
                 // Récupére le dernier changement de rôle

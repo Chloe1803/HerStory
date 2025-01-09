@@ -37,30 +37,16 @@ namespace HerStory.Server.Repositories
         {
             if (user == null)
             {
-                Console.WriteLine("Error in GetLastRoleChangeByUser: user is null.");
                 throw new ArgumentNullException(nameof(user));
             }
 
-            Console.WriteLine($"Getting last role change for user {user.Id}...");
-
-            try
-            {
-                // Exemple d'une requête LINQ (selon votre implémentation)
-                var lastRoleChange = await _context.RoleChange
+          
+            var lastRoleChange = await _context.RoleChange
                     .Where(rc => rc.AppUserId == user.Id && rc.IsLastChange)
                     .FirstOrDefaultAsync();
 
-                Console.WriteLine(lastRoleChange != null
-                    ? $"Last role change found: {lastRoleChange.Id}, Status: {lastRoleChange.Status}"
-                    : "No last role change found.");
+            return lastRoleChange;
 
-                return lastRoleChange;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Exception in GetLastRoleChangeByUser: {ex.Message}");
-                throw;
-            }
         }
 
         public Task<RoleChange> GetRoleChangeById(int id)

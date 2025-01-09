@@ -15,7 +15,7 @@ namespace HerStory.Server.Models
         public required string CountryOfBirth { get; set; }
         public required DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public ICollection<PortraitCategory>? PortraitCategories { get; set; }
-        public  ICollection<PortraitField>? PortraitFields { get; set; }
+        public ICollection<PortraitCategory> PortraitCategories { get; set; } = new List<PortraitCategory>();
+        public  ICollection<PortraitField> PortraitFields { get; set; } = new List<PortraitField>();
     }
 }
