@@ -10,7 +10,29 @@ import { RoleConstants, RoleName } from '../../../constants/role-constants';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
-  profile!: ProfileUser;
+  profile: ProfileUser = {
+    id: 0,
+    firstName: '',
+    lastName: '',
+    email: '',
+    aboutMe: '',
+    role: {
+      id: 0,
+      name: RoleName.Visitor, // Défaut : "Visitor"
+    },
+    createdAt: '',
+    numberOfContributions: 0,
+    numberOfReviews: 0,
+    lastRoleChange: {
+      id: 0,
+      requestedRole: {
+        id: 0,
+        name: RoleName.Visitor, // Défaut pour le rôle demandé
+      },
+      status: '', // Défaut vide
+    },
+  };
+
   RoleConstants = RoleConstants;
   isLoading = true;
   errorMessage: string | null = null;
@@ -27,6 +49,8 @@ export class ProfileComponent {
     this.userService.getProfile().subscribe({
       next: (profile) => {
         this.profile = profile;  // Assignation du profil récupéré
+        console.log(this.profile.numberOfContributions);
+        console.log(profile.numberOfContributions);
         this.isLoading = false;  // Fin du chargement
       },
       error: (err) => {
@@ -38,6 +62,8 @@ export class ProfileComponent {
         }
       }
     });
+
+   
   }
   
   logout(): void {

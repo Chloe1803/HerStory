@@ -7,7 +7,7 @@
         <button class="btn btn-outline-light" *ngIf="!isMobile" (click)="navigateToSearch()"><i class="bi bi-search-heart"></i></button>
         <!--<button *ngIf="isAuthenticated" class="btn btn-outline-light"><i class="bi bi-bell"></i></button>-->
         <div class="dropdown" *ngIf="isAuthenticated&&autorizeContributorAndUp()">
-          <button class="btn btn-outline-light " *ngIf="!isMobile" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-list"></i></button>
+          <button class="btn btn-outline-light "  id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-list"></i></button>
 
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li *ngIf="autorizeContributorAndUp()"> <a class="dropdown-item" (click)="navigateToNewContribution()">Créer un nouveau portrait</a></li>
@@ -30,7 +30,7 @@
   <footer *ngIf="isMobile" class="header-and-footer-container bg-[url('/assets/img/fond_footer.png')]">
     <button *ngIf="isHomeRoute" class="btn btn-outline-light" (click)="navigateToFilter()"><i class="bi bi-funnel"></i></button>
     <button class="btn btn-outline-light" (click)="navigateToSearch()"><i class="bi bi-search-heart"></i></button>
-    <div class="dropdown" *ngIf="isAuthenticated&&autorizeContributorAndUp()">
+    <!--<div class="dropdown" *ngIf="isAuthenticated&&autorizeContributorAndUp()">
       <button class="btn btn-outline-light " *ngIf="isMobile" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-list"></i></button>
 
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -39,7 +39,7 @@
         <li *ngIf=" authorizeReviewerandUp()"> <a class="dropdown-item" (click)="navigateToContributionManagement()">Gestion des contributions</a></li>
         <li *ngIf=" authorizeReviewerandUp()"> <a class="dropdown-item" (click)="navigateToRoleManagement()">Gestion des utilisateurs</a></li>
       </ul>
-    </div>
+    </div>-->
   </footer>
 </div>
 

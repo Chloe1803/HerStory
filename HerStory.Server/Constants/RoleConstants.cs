@@ -28,7 +28,7 @@ namespace HerStory.Server.Constants
 
             public static bool HasAccess(RoleName userRole, RoleName requiredRole)
             {
-                return RoleLevels[userRole] >= RoleLevels[requiredRole];
+                return RoleLevels[userRole] > RoleLevels[requiredRole];
             }
 
             public static RoleName? GetNextRole(RoleName currentRole)

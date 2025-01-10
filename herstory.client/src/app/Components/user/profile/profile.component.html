@@ -57,25 +57,25 @@
   </div>
 
   <!-- Number of Contributions -->
-  <div *ngIf="profile.numberOfContributions > 0" class="mb-4">
-    <label class="block text-lg font-bold text-purple-700 mb-2">Contributions :</label>
+  <div *ngIf="profile && profile.numberOfContributions > 0" class="flex items-center mb-4">
+    <label class="text-lg font-bold text-purple-700 mr-2">Nombre de contributions :</label>
     <p class="text-lg text-gray-700">{{ profile.numberOfContributions }}</p>
   </div>
 
   <!-- Number of Reviews -->
-  <div *ngIf="profile.numberOfReviews > 0" class="mb-4">
-    <label class="block text-lg font-bold text-purple-700 mb-2">Avis :</label>
+  <div *ngIf="profile && profile.numberOfReviews > 0" class="flex items-center mb-4">
+    <label class="text-lg font-bold text-purple-700 mr-2">Nombre de  :</label>
     <p class="text-lg text-gray-700">{{ profile.numberOfReviews }}</p>
   </div>
 
   <!--Button Role Request-->
   <!-- Si le statut de la demande de rôle est 'Pending', affiche un bouton désactivé -->
-  <button *ngIf="profile.lastRoleChange.status === 'Pending'" class="w-full bg-gray-400  text-white py-2 px-4 rounded cursor-not-allowed" disabled>
+  <button *ngIf="profile.lastRoleChange !=null && profile.lastRoleChange.status && profile.lastRoleChange.status === 'Pending'" class="w-full bg-gray-400  text-white py-2 px-4 rounded cursor-not-allowed" disabled>
     En attente de validation pour le rôle {{ RoleConstants.getRoleNameInFrench(profile.lastRoleChange.requestedRole.name) }}
   </button>
 
   <!-- Si le statut est autre que 'Pending', affiche un bouton actif -->
-  <button *ngIf="profile.lastRoleChange.status !== 'Pending'" class="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:bg-gray-400" (click)="requestRoleChange()">
+  <button *ngIf="profile.lastRoleChange !=null && profile.lastRoleChange.status && profile.lastRoleChange.status !== 'Pending'" class="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:bg-gray-400" (click)="requestRoleChange()">
     Demander à devenir {{ RoleConstants.getRoleNameInFrench(RoleConstants.nextRole(profile.role.name)) }}
   </button>
   <!-- Edit Button -->
