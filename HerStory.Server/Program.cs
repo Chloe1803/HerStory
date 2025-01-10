@@ -2,16 +2,22 @@ using Microsoft.EntityFrameworkCore;
 using HerStory.Server.Data;
 using HerStory.Server;
 using HerStory.Server.Extensions;
-using Microsoft.Extensions.Logging;
 using HerStory.Server.Middleware;
 using HerStory.Server.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
-
 using Microsoft.OpenApi.Models;
 using HerStory.Server.Hubs;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//chargement des varaibles d'environnement
+Env.Load("../.env");
+builder.Configuration.AddEnvironmentVariables();
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+Console.WriteLine("Connection String: " + connectionString);
+var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET");
 
 // Configure le logging 
 builder.Logging.ClearProviders();  
@@ -54,7 +60,7 @@ builder.Services.AddSwaggerGen(options =>
 
 // Services liées a la DB et au entités
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 builder.Services.AddTransient<Seed>();
 builder.Services.AddApplicationServices();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -75,7 +81,13 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<JwtAuthenticationHandler>();
 
 // Charge les paramètres JWT depuis appsettings.json
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+builder.Services.Configure<JwtSettings>(options =>
+{
+    options.SecretKey = jwtSecret;
+    options.Issuer = "HerStoryIssuer";
+    options.Audience = "HerStoryAudience";
+    options.ExpirationInMinutes = 60;
+});
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
 
