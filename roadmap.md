@@ -33,3 +33,9 @@
 
 - **Champs supplémentaires pour les portraits** :  
   Ajouter la possibilité d’inclure des champs non prévus initialement, notamment pour citer des sources.
+
+- **Faire un système de favoris** :
+  Ajouter la possibilité d'avoir des portraits favoris
+
+- **Faire un système de suggestions pour la recherche** :
+  Avoir des suggestions qui s'affichent en fonction des caractères saisies dans la barre de recherche. 

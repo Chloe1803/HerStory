@@ -131,7 +131,7 @@ Exécutez la commande suivante pour importer les données dans votre base de don
 
 ## 📚 Documentation complémentaire
 - [Cahier des charges fonctionnel](./functional-specifications.md) : Décrit en détail les objectifs, fonctionnalités, et technologies utilisées.  
-- [Roadmap] : Décrit les objectifs d'évolution du projet.
+- [Roadmap](./roadmap.md) : Décrit les objectifs d'évolution du projet.
 
 ## 🌍 Contribution
 

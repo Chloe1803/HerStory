@@ -5,3 +5,13 @@
 .main-layout-btn {
     color: white
 }
+
+.btn-white {
+  background-color: white;
+  border: 1px solid #6b46c1; /* Couleur violette, ajustez si nécessaire */
+  color: #6b46c1;
+}
+
+.text-purple {
+  color: #6b46c1; /* Couleur violette */
+}

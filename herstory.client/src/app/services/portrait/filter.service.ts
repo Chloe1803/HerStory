@@ -11,6 +11,9 @@ export class FilterService {
     categories: [],  
     fields: []       
   });
+  // Gestion de l'état "isFilterActive"
+  private isFilterActiveSubject = new BehaviorSubject<boolean>(false);
+  isFilterActive$ = this.isFilterActiveSubject.asObservable();
 
   // Observable pour que les composants puissent s'abonner aux filtres
   filters$ = this.filtersSubject.asObservable();
@@ -19,8 +22,10 @@ export class FilterService {
 
   // Applique de nouveaux filtres
   applyFilters(filterCriteria: FilterCriteria) {
-    console.log(filterCriteria);
-    this.filtersSubject.next(filterCriteria); 
+    this.filtersSubject.next(filterCriteria);
+
+    const isActive = this.isFilterCriteriaActive(filterCriteria);
+    this.isFilterActiveSubject.next(isActive);
   }
 
   // Réinitialise les filtres
@@ -28,6 +33,15 @@ export class FilterService {
     this.filtersSubject.next({
       categories: [],
       fields: []
-    }); 
+    });
+    this.isFilterActiveSubject.next(false);
+  }
+
+  // Méthode pour vérifier si un filtre est actif
+  private isFilterCriteriaActive(filterCriteria: FilterCriteria): boolean {
+    return (
+      (filterCriteria.categories && filterCriteria.categories.length > 0) ||
+      (filterCriteria.fields && filterCriteria.fields.length > 0)
+    );
   }
 }

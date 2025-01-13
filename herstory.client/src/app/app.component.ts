@@ -5,6 +5,7 @@ import { RouterOutlet, Router } from '@angular/router';
 import { AuthService } from './services/authentification/auth.service';
 import { Subscription } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
+import { FilterService } from './services/portrait/filter.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,9 @@ export class AppComponent implements OnInit {
   private roleSubscription!: Subscription;
   isHomeRoute: boolean = false;
   menuItems: any[] = [];
-  constructor(private router: Router, private authService: AuthService, private cdr: ChangeDetectorRef) {}
+  isFilterActive!: boolean;
+
+  constructor(private router: Router, private authService: AuthService, private cdr: ChangeDetectorRef, private filterService: FilterService) { }
 
   isMobile: boolean = false;
 
@@ -30,10 +33,13 @@ export class AppComponent implements OnInit {
     this.authSubscription = this.authService.isLoggedIn().subscribe(
       (authenticated) => {
         this.isAuthenticated = authenticated;
-        
-      }
-
+      } 
     );
+
+    this.filterService.isFilterActive$.subscribe(isActive => {
+      this.isFilterActive = isActive;
+    });
+
     this.checkCurrentRoute();
 
     // Observer les changements de route pour mettre à jour la condition

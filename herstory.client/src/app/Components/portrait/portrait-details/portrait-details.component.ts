@@ -4,6 +4,7 @@ import { PortraitDetail } from '../../../interfaces/portrait';
 import { PortraitService } from '../../../services/portrait/portrait.service';
 import { AuthService } from '../../../services/authentification/auth.service';
 import { TagColorMapping } from '../../../constants/category-field';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -16,6 +17,8 @@ export class PortraitDetailsComponent {
   portraitId: number | undefined;
   isLoading = true;
   errorMessage: string | null = null;
+  isAuthenticated: boolean = false;
+  private authSubscription!: Subscription;
   constructor(private portraitService: PortraitService, private route: ActivatedRoute, private router : Router ,private authService: AuthService) { }
 
   ngOnInit(): void {
@@ -34,6 +37,13 @@ export class PortraitDetailsComponent {
         },
       });
     }
+    this.authSubscription = this.authService.isLoggedIn().subscribe(
+      (authenticated) => {
+        this.isAuthenticated = authenticated;
+
+      }
+
+    );
   }
 
   autorizeContributorsAndUp(): boolean {

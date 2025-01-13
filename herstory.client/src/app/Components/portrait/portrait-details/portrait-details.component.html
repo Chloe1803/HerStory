@@ -76,6 +76,6 @@
     </p>
   </div>
 
-  <button *ngIf="autorizeContributorsAndUp()" (click)="navigateToEdit(portrait)" class="w-full mt-5 mb-2 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:bg-gray-300">Proposer une modification du portrait</button>
+  <button *ngIf=" isAuthenticated && autorizeContributorsAndUp()" (click)="navigateToEdit(portrait)" class="w-full mt-5 mb-2 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:bg-gray-300">Proposer une modification du portrait</button>
 </div>
 
