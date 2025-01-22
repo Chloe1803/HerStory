@@ -3,8 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 .env
-/app/
-/runtime/
+HerStory.Server/app/
+HerStory.Server/runtimes/
+
 
 # User-specific files
 *.rsuser
