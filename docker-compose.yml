@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=HerStoryDatabase1507!
+    ports:
+      - "1433:1433"
+    volumes:
+      - db-data:/var/opt/mssql # Volume pour persister les données SQL Server
+      - ./scripts/HerStoryDB.sql:/tmp/HerStoryDB.sql # Montage du script SQL dans le conteneur
+    networks:
+      - herstory_network
+
+  sql-tools:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: sql-tools
+    depends_on:
+      - db
+    entrypoint: >
+      /bin/sh -c "sleep 30 && 
+      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'HerStoryDatabase1507!' -i /tmp/HerStoryDB.sql"
+    volumes:
+      - ./scripts/HerStoryDB.sql:/tmp/HerStoryDB.sql # Monter le même script ici
+    networks:
+      - herstory_network
+
+  backend:
+    image: herstory
+    container_name: herstory-back
+    environment:
+      - DB_CONNECTION_STRING=Server=sqlserver;Database=HerStory;User Id=sa;Password=HerStoryDatabase1507!;Encrypt=False;
+      - JWT_SECRET=HerStorySecretKeyForJWTHoppefullyLongEnough
+    ports:
+      - "5103:5103"
+    networks:
+      - herstory_network
+
+  frontend:
+    image: herstory-front
+    container_name: herstory-front
+    ports:
+      - "4200:4200"
+    networks:
+      - herstory_network
+
+volumes:
+  db-data: # Volume pour les données SQL Server
+
+networks:
+  herstory_network:
+    driver: bridge
