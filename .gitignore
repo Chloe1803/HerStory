@@ -5,7 +5,7 @@
 .env
 HerStory.Server/app/
 HerStory.Server/runtimes/
-
+*.exe
 
 # User-specific files
 *.rsuser

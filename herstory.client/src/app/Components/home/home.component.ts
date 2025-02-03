@@ -40,7 +40,7 @@ export class HomeComponent {
 
   loadPortraits(): void {
     const { categories, fields } = this.filters;
-    console.log(this.filters);
+   
     // Si les filtres sont vides, on récupère tous les portraits
     if (categories.length === 0 && fields.length === 0) {
       this.portraitService.getPortraits().subscribe({

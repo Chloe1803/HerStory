@@ -49,8 +49,7 @@ export class ProfileComponent {
     this.userService.getProfile().subscribe({
       next: (profile) => {
         this.profile = profile;  // Assignation du profil récupéré
-        console.log(this.profile.numberOfContributions);
-        console.log(profile.numberOfContributions);
+
         this.isLoading = false;  // Fin du chargement
       },
       error: (err) => {

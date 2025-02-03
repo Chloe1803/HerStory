@@ -143,7 +143,7 @@ export class ContributionFormComponent implements OnInit {
       contribution.portraitId = this.portraitData.id;
     }
 
-    console.log(contribution);
+
     this.contributionService.submitContribution(contribution).subscribe({
       next: () => {
         this.router.navigate([''])
