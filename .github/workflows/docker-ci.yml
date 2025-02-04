@@ -1,0 +1,33 @@
+name: Build & Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+      - develop  # Modifie si tu veux d'autres branches
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build and push database image
+        run: |
+          docker build -t chloem18/herstory-db:latest -f docker/db/Dockerfile .
+          docker push chloem18/herstory-db:latest
+
+      - name: Build and push backend image
+        run: |
+          docker build -t chloem18/herstory-backend:latest -f docker/backend/Dockerfile .
+          docker push chloem18/herstory-backend:latest
+
+      - name: Build and push frontend image
+        run: |
+          docker build -t chloem18/herstory-frontend:latest -f docker/frontend/Dockerfile .
+          docker push chloem18/herstory-frontend:latest
