@@ -15,8 +15,8 @@ services:
       - herstory_network
 
   backend:
-    image: chloem18/herstory-back:latest
-    container_name: herstory-back
+    image: chloem18/herstory-backend:latest
+    container_name: herstory-backend
     environment:
       - DB_CONNECTION_STRING=Server=sqlserver;Database=HerStory;User Id=sa;Password=HerStoryDatabase1507!;Encrypt=False;
       - JWT_SECRET=HerStorySecretKeyForJWTHoppefullyLongEnough
@@ -28,8 +28,8 @@ services:
       - db
 
   frontend:
-    image: chloem18/herstory-front:latest
-    container_name: herstory-front
+    image: chloem18/herstory-frontend:latest
+    container_name: herstory-frontend
     ports:
       - "4200:4200"
     networks:
