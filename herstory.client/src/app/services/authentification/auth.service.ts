@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { ApiService } from '../api/api.service';
 import { RegisterUser } from '../../interfaces/user';
 import jwt_decode from 'jwt-decode';
+import { environment } from '../../../environments/environment'
 
 
 
@@ -13,7 +14,7 @@ import jwt_decode from 'jwt-decode';
   providedIn: 'root',
 })
 export class AuthService {
-  private tokenKey = "HerStorySecretKeyForJWTHoppefullyLongEnough";
+  private tokenKey = environment.apiToken;
   private isAuthenticated = new BehaviorSubject<boolean>(this.hasToken());
   private currentRole !: string;
 

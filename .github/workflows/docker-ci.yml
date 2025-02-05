@@ -36,6 +36,9 @@ jobs:
           file: ./herstory.client/Dockerfile
           push: true
           tags: chloem18/herstory-frontend:latest
+          build-args: |
+            API_URL_PROD=${{ secrets.API_URL_PROD }}
+            API_SECRET_TOKEN=${{ secrets.API_SECRET_TOKEN }}
 
       - name: Build and push Database image
         uses: docker/build-push-action@v5
