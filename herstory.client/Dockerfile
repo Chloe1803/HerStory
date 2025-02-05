@@ -12,6 +12,6 @@ RUN npm run build --configuration=production
 
 # Étape 2 : Serveur Nginx pour le front
 FROM nginx:alpine
-COPY --from=build /app/dist/herstory.client /usr/share/nginx/html
+COPY --from=build /app/dist/herstory.client/browser /usr/share/nginx/html
 EXPOSE 4200
 CMD ["nginx", "-g", "daemon off;"]
