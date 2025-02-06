@@ -33,8 +33,8 @@ jobs:
           file: ./HerStory.Server/Dockerfile
           push: true
           tags: |
-            chloem18/herstory-backend:${{ env.VERSION }}
             chloem18/herstory-backend:latest
+            chloem18/herstory-backend:${{ github.ref_name }}
 
       - name: Build and push Frontend image
         uses: docker/build-push-action@v5
@@ -43,8 +43,8 @@ jobs:
           file: ./herstory.client/Dockerfile
           push: true
           tags: |
-            chloem18/herstory-frontend:${{ env.VERSION }}
             chloem18/herstory-frontend:latest
+            chloem18/herstory-frontend:${{ github.ref_name }}
           build-args: |
             API_URL_PROD=${{ secrets.API_URL_PROD }}
             API_SECRET_TOKEN=${{ secrets.API_SECRET_TOKEN }}
@@ -56,5 +56,5 @@ jobs:
           file: ./scripts/Dockerfile
           push: true
           tags: |
-            chloem18/herstory-db:${{ env.VERSION }}
             chloem18/herstory-db:latest
+            chloem18/herstory-db:${{ github.ref_name }}
