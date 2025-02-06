@@ -4,16 +4,21 @@ on:
   push:
     branches:
       - master
-  pull_request:
+    tags:
+      - 'v*'
+pull_request:
     branches:
-      - master
-
+      - develop 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Extract Git tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -27,7 +32,9 @@ jobs:
           context: ./HerStory.Server   # Dossier contenant le Dockerfile du backend
           file: ./HerStory.Server/Dockerfile
           push: true
-          tags: chloem18/herstory-backend:latest
+          tags: |
+            chloem18/herstory-backend:${{ env.VERSION }}
+            chloem18/herstory-backend:latest
 
       - name: Build and push Frontend image
         uses: docker/build-push-action@v5
@@ -35,7 +42,9 @@ jobs:
           context: ./herstory.client  # Dossier contenant le Dockerfile du frontend
           file: ./herstory.client/Dockerfile
           push: true
-          tags: chloem18/herstory-frontend:latest
+          tags: |
+            chloem18/herstory-frontend:${{ env.VERSION }}
+            chloem18/herstory-frontend:latest
           build-args: |
             API_URL_PROD=${{ secrets.API_URL_PROD }}
             API_SECRET_TOKEN=${{ secrets.API_SECRET_TOKEN }}
@@ -46,4 +55,6 @@ jobs:
           context: ./scripts  # Dossier contenant le Dockerfile de la base de données
           file: ./scripts/Dockerfile
           push: true
-          tags: chloem18/herstory-db:latest
+          tags: |
+            chloem18/herstory-db:${{ env.VERSION }}
+            chloem18/herstory-db:latest
