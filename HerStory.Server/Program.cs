@@ -70,7 +70,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") // URL du front-end Angular
+        policy.WithOrigins("http://localhost:4200", "https://herstory-app.fr") // URL du front-end Angular
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
