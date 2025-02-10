@@ -3,14 +3,14 @@
     <div class="header header-and-footer-container flex items-center justify-between p-1 bg-[url('/assets/img/fond_violet.png')] bg-cover bg-center bg-no-repeat">
       <h1 [routerLink]="['']" class="h1 text-white m-2">HerStory</h1>
       <div class="flex items-center space-x-2 mr-2">
-        <button *ngIf="isHomeRoute && !isMobile" class="btn"
+        <button *ngIf="isHomeRoute " class="btn"
           [style.border]="isFilterActive ? '2px solid purple-300' : '1px solid white'" 
           [style.background-color]="isFilterActive ? 'white' : 'transparent'" 
           [style.color]="isFilterActive ? 'purple-300' : 'white'"
           (click)="navigateToFilter()">
             <i class="bi bi-funnel"></i>
         </button>
-        <button class="btn btn-outline-light" *ngIf="!isMobile" (click)="navigateToSearch()"><i class="bi bi-search-heart"></i></button>
+        <button class="btn btn-outline-light" (click)="navigateToSearch()"><i class="bi bi-search-heart"></i></button>
         <!--<button *ngIf="isAuthenticated" class="btn btn-outline-light"><i class="bi bi-bell"></i></button>-->
         <div class="dropdown" *ngIf="isAuthenticated&&autorizeContributorAndUp()">
           <button class="btn btn-outline-light "  id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-list"></i></button>
@@ -33,7 +33,7 @@
     <router-outlet></router-outlet>
   </main>
 
-  <footer *ngIf="isMobile" class="header-and-footer-container bg-[url('/assets/img/fond_footer.png')]">
+  <!--<footer *ngIf="isMobile" class="header-and-footer-container bg-[url('/assets/img/fond_footer.png')]">
     <button *ngIf="isHomeRoute" class="btn"
           [style.border]="isFilterActive ? '2px solid purple-300' : '1px solid white'" 
           [style.background-color]="isFilterActive ? 'white' : 'transparent'" 
@@ -49,7 +49,7 @@
         <li *ngIf=" authorizeReviewerandUp()"> <a class="dropdown-item" (click)="navigateToRoleManagement()">Gestion des utilisateurs</a></li>
       </ul>
     </div>
-  </footer>
+  </footer>-->
 </div>
 
 
