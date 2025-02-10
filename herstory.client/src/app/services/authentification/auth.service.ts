@@ -6,38 +6,34 @@ import { map } from 'rxjs/operators';
 import { ApiService } from '../api/api.service';
 import { RegisterUser } from '../../interfaces/user';
 import jwt_decode from 'jwt-decode';
-import { environment } from '../../../environments/environment'
-
-
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private tokenKey = environment.apiToken;
+  private tokenKey = 'auth_token'; 
   private isAuthenticated = new BehaviorSubject<boolean>(this.hasToken());
-  private currentRole !: string;
+  private currentRole!: string ;
 
-
-  constructor(private http: HttpClient, private router: Router, private api: ApiService) { }
+  constructor(private http: HttpClient, private router: Router, private api: ApiService) {
+    this.loadUserFromToken();
+  }
 
 
   login(email: string, password: string): Observable<void> {
-    return this.http.post<{ token: string }>(this.api.apiUrl + '/Auth/login', { email, password }).pipe(
+    return this.http.post<{ token: string }>(`${this.api.apiUrl}/Auth/login`, { email, password }).pipe(
       map(response => {
         this.setToken(response.token);
         this.isAuthenticated.next(true);
-        this.setRole();
       })
     );
   }
 
   register(user: RegisterUser): Observable<void> {
-    return this.http.post<{ token: string }>(this.api.apiUrl + '/Auth/register', user).pipe(
+    return this.http.post<{ token: string }>(`${this.api.apiUrl}/Auth/register`, user).pipe(
       map(response => {
         this.setToken(response.token);
         this.isAuthenticated.next(true);
-        this.setRole();
       })
     );
   }
@@ -48,8 +44,19 @@ export class AuthService {
     this.router.navigate(['']);
   }
 
+  private isTokenExpired(token: string): boolean {
+    const decodedToken: any = jwt_decode(token);
+    const currentTime = Date.now() / 1000; 
+    return decodedToken.exp < currentTime;
+  }
+
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    const token = localStorage.getItem(this.tokenKey);
+    if (token && this.isTokenExpired(token)) {
+      this.logout(); // Déconnecte l'utilisateur si le token est expiré
+      return null;
+    }
+    return token;
   }
 
   isLoggedIn(): Observable<boolean> {
@@ -58,72 +65,48 @@ export class AuthService {
 
   private setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
+    this.loadUserFromToken(); 
   }
 
   private clearToken(): void {
     localStorage.removeItem(this.tokenKey);
+    this.currentRole = '';
   }
 
   private hasToken(): boolean {
     return !!this.getToken();
   }
 
-  getUserInfo(): { id: string; role: string } | null {
+  private loadUserFromToken(): void {
     const token = this.getToken();
- 
-
-    if (token && token.includes('.')) {
-      try {
-        const decodedToken: any = jwt_decode(token);
-       
-
-        // Récupérer le rôle avec la clé complète
-        const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-        if (!role) {
-          console.error('Rôle introuvable dans le token');
-          return null;
-        }
-
-        return {
-          id: decodedToken.sub,
-          role: role,
-        };
-      } catch (error) {
-        console.error('Erreur lors du décodage du token :', error);
-        return null;
+    if (token) {
+      const userInfo = this.extractUserInfo(token);
+      if (userInfo) {
+        this.currentRole = userInfo.role;
       }
     }
-
-    console.error('Token non valide ou absent');
-    return null;
   }
 
-  setRole(): void {
-    const userInfo = this.getUserInfo();
-    if (userInfo) {
-      this.currentRole = userInfo.role;
+  private extractUserInfo(token: string): { id: string; role: string } | null {
+    try {
+      const decodedToken: any = jwt_decode(token);
+      const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return role ? { id: decodedToken.sub, role } : null;
+    } catch (error) {
+      console.error('Erreur lors du décodage du token :', error);
+      return null;
     }
   }
-
-
 
   authorizeContributorAndUp(): boolean {
-
-    this.setRole();
-    if (this.currentRole === 'Visitor' || this.currentRole === 'Banned') {
-      return false;
-    }
-
-    return true;
+    return this.currentRole !== 'Visitor' && this.currentRole !== 'Banned' && this.currentRole !== '';
   }
 
   authorizeReviewerandUp(): boolean {
+    return ['Reviewer', 'Admin', 'SuperAdmin'].includes(this.currentRole);
+  }
 
-    this.setRole();
-    if (this.currentRole === 'Reviewer' || this.currentRole === 'Admin' || this.currentRole === 'SuperAdmin') {
-      return true;
-    }
-
-    return false;
+  getCurrentUserRole(): string | null {
+    return this.currentRole || null; // Utilise la variable déjà stockée
   }
 }
