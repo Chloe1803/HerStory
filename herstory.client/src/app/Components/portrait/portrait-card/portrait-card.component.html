@@ -4,11 +4,11 @@
       <img class="object-cover w-full h-full" [src]="portrait.photoUrl" alt="{{portrait.firstName}} {{portrait.lastName}}">
      </div>
 
-    <div class="absolute left-[51%]">
-      <h2 class="text-xxl font-semibold text-purple-700">
+    <div class="absolute left-[50%]">
+      <h2 class="text-xxl font-semibold text-purple-700 ml-3">
         {{portrait.firstName}} {{portrait.lastName}}
       </h2>
-      <p class="text-sm text-gray-500">
+      <p class="text-sm text-gray-500 ml-3">
         {{ getLifeSpan(portrait.dateOfBirth, portrait.dateOfDeath) }}
       </p>
 

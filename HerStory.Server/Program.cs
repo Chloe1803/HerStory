@@ -16,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 Env.Load("../.env");
 builder.Configuration.AddEnvironmentVariables();
 var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-Console.WriteLine("Connection String: " + connectionString);
 var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET");
 
 // Configure le logging 

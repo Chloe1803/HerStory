@@ -12,11 +12,12 @@ import jwt_decode from 'jwt-decode';
 })
 export class AuthService {
   private tokenKey = 'auth_token'; 
-  private isAuthenticated = new BehaviorSubject<boolean>(this.hasToken());
+  private isAuthenticated = new BehaviorSubject<boolean>(false);
   private currentRole!: string ;
 
   constructor(private http: HttpClient, private router: Router, private api: ApiService) {
     this.loadUserFromToken();
+    this.isAuthenticated.next(this.hasToken());
   }
 
 
@@ -40,7 +41,9 @@ export class AuthService {
 
   logout(): void {
     this.clearToken();
-    this.isAuthenticated.next(false);
+    if (this.isAuthenticated) { 
+      this.isAuthenticated.next(false);
+    }
     this.router.navigate(['']);
   }
 
