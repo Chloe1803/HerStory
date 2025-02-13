@@ -1,6 +1,7 @@
 ﻿using HerStory.Server.Dtos.UserDto;
 using HerStory.Server.Exceptions;
 using HerStory.Server.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HerStory.Server.Controllers
@@ -21,6 +22,7 @@ namespace HerStory.Server.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
@@ -56,10 +58,11 @@ namespace HerStory.Server.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred during login.");
-                throw ex;
+                throw;
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
@@ -91,7 +94,7 @@ namespace HerStory.Server.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred during register.");
-                throw ex;
+                throw ;
             }
         }
     }

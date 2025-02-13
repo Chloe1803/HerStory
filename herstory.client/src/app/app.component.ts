@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import {CommonModule} from '@angular/common';
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, EventEmitter} from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { AuthService } from './services/authentification/auth.service';
 import { Subscription } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { FilterService } from './services/portrait/filter.service';
+import { ScrollService } from './services/scroll/scroll.service';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,8 @@ export class AppComponent implements OnInit {
   menuItems: any[] = [];
   isFilterActive!: boolean;
 
-  constructor(private router: Router, private authService: AuthService, private cdr: ChangeDetectorRef, private filterService: FilterService) { }
+
+  constructor(private router: Router, private authService: AuthService, private cdr: ChangeDetectorRef, private filterService: FilterService, private scrollService: ScrollService) { }
 
   isMobile: boolean = false;
 
@@ -112,6 +114,10 @@ export class AppComponent implements OnInit {
 
   navigateToFilter(): void {
     this.router.navigate(['filter']);
+  }
+
+  onScroll(event: Event): void {
+    this.scrollService.emitScrollEvent(event); // Transmet l'événement à travers le service
   }
   
 }

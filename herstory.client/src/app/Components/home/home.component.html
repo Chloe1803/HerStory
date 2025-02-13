@@ -12,6 +12,11 @@
 
 
 
-<div *ngIf="!isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-4">
+<div *ngIf="!isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-4" (scroll)="onScroll($event)">
   <app-portrait-card *ngFor="let portrait of portraits" [portrait]="portrait"></app-portrait-card>
+  <div *ngIf="isLoadingMore" class="loading-spinner">
+    <app-spinner></app-spinner>
+  </div>
+
 </div>
+

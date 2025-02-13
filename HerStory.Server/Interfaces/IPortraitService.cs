@@ -5,7 +5,7 @@ namespace HerStory.Server.Interfaces
 {
     public interface IPortraitService
     {
-        Task<ICollection<PortraitListDto>> GetAllPortraitsAsync();
+        Task<ICollection<PortraitListDto>> GetAllPortraitsAsync(int offset, int limit);
         Task<PortraitDetailDto> GetPortraitByIdAsync(int id);
         Task<ICollection<CategoryDto>> GetCategories();
         Task<ICollection<FieldDto>> GetFields();

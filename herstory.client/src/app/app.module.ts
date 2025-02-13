@@ -21,6 +21,7 @@ import { UserContributionViewComponent } from './Components/contribution/user-co
 import { FilterPortraitsComponent } from './Components/filter-portraits/filter-portraits.component';
 import { SpinnerComponent } from './Components/spinner/spinner.component';
 import { ErrorComponent } from './Components/error/error.component';
+import { OtherUserProfileComponent } from './Components/user/other-user-profile/other-user-profile.component';
 
 
 
@@ -40,6 +41,7 @@ import { ErrorComponent } from './Components/error/error.component';
     UserContributionViewComponent,
     FilterPortraitsComponent,
     ErrorComponent,
+    OtherUserProfileComponent,
 
  
    

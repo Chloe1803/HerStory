@@ -1,0 +1,59 @@
+<app-spinner *ngIf="isLoading"></app-spinner>
+
+<p *ngIf="errorMessage" class="text-center text-lg">{{errorMessage}}</p>
+
+<div *ngIf="!isLoading && errorMessage==null" class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg border-2 border-purple-300 py-8 px-6">
+
+
+  <div class="flex justify-between items-center mb-6">
+    <!-- Titre centré sur les petits écrans -->
+    <h2 class="text-4xl font-bold text-purple-700 text-center flex-1">Profil de {{ profile.firstName }} {{ profile.lastName }} </h2>
+
+   
+  </div>
+
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+  
+    <!-- Email -->
+    <div class="flex items-center mb-4">
+      <label class="text-lg font-bold text-purple-700 mr-2">Email :</label>
+      <p class="text-lg text-gray-700">{{ profile.email }}</p>
+    </div>
+
+    <!-- Role -->
+    <div class="flex items-center mb-4">
+      <label class="text-lg font-bold text-purple-700 mr-2">Rôle :</label>
+      <p class="text-lg text-gray-700">{{ RoleConstants.getRoleNameInFrench(profile.role.name) }}</p>
+    </div>
+
+  </div>
+
+
+  <!-- Created At -->
+  <div class="flex items-center mb-4">
+    <label class="text-lg font-bold text-purple-700 mr-2">Membre depuis le :</label>
+    <p class="text-lg text-gray-700">{{ profile.createdAt | date }}</p>
+  </div>
+
+  <!-- About Me -->
+  <div class="mb-6">
+    <label class="block text-lg font-bold text-purple-700 mb-2">À propos de moi :</label>
+    <p class="text-lg text-gray-700">{{ profile.aboutMe }}</p>
+  </div>
+
+  <!-- Number of Contributions -->
+  <div *ngIf="profile && profile.numberOfContributions > 0" class="flex items-center mb-4">
+    <label class="text-lg font-bold text-purple-700 mr-2">Nombre de contributions :</label>
+    <p class="text-lg text-gray-700">{{ profile.numberOfContributions }}</p>
+  </div>
+
+  <!-- Number of Reviews -->
+  <div *ngIf="profile && profile.numberOfReviews > 0" class="flex items-center mb-4">
+    <label class="text-lg font-bold text-purple-700 mr-2">Nombre de relecture :</label>
+    <p class="text-lg text-gray-700">{{ profile.numberOfReviews }}</p>
+  </div>
+
+  
+</div>
+

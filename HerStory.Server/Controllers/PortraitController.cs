@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using HerStory.Server.Interfaces;
 using HerStory.Server.Repositories;
 using HerStory.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace HerStory.Server.Controllers
@@ -16,26 +17,30 @@ namespace HerStory.Server.Controllers
         {
             _portraitService = portraitService;
         }
+
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(200, Type =typeof(ICollection<PortraitListDto>))]
-        public async Task<IActionResult> GetAllPortraitsAsync()
+        public async Task<IActionResult> GetAllPortraitsAsync([FromQuery] int offset = 0)
         {
             try
             {
-                var portraits = await _portraitService.GetAllPortraitsAsync();
+                int limit = 12;
+                var portraits = await _portraitService.GetAllPortraitsAsync(offset, limit);
                 if (portraits == null || !portraits.Any())
                 {
-                    return NotFound();
+                    return Ok(new List<Portrait>());
                 }
 
                 return Ok(portraits);
             }
-            catch(Exception ex)
+            catch
             {
-                throw ex;
+                throw ;
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(PortraitDetailDto))]
         public async Task<IActionResult> GetPortraitByIdAsync(int id)
@@ -49,12 +54,13 @@ namespace HerStory.Server.Controllers
                 }
                 return Ok(portrait);
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw ;
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("categories")]
         [ProducesResponseType(200, Type = typeof(ICollection<CategoryDto>))]
         public async Task<IActionResult> GetCategories()
@@ -68,12 +74,13 @@ namespace HerStory.Server.Controllers
                 }
                 return Ok(categories);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("fields")]
         [ProducesResponseType(200, Type = typeof(ICollection<FieldDto>))]
         public async Task<IActionResult> GetFields()
@@ -87,12 +94,13 @@ namespace HerStory.Server.Controllers
                 }
                 return Ok(fields);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw ;
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("search")]
         [ProducesResponseType(200, Type = typeof(ICollection<PortraitListDto>))]
         public async Task<IActionResult> SearchPortraits([FromQuery] string term)
@@ -112,12 +120,13 @@ namespace HerStory.Server.Controllers
 
                 return Ok(portraits);
             }
-            catch (Exception ex)
+            catch 
             {
-                throw ex;
+                throw;
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("filtre")]
         [ProducesResponseType(200, Type = typeof(ICollection<PortraitListDto>))]
         public async Task<ActionResult<List<Portrait>>> FilterPortraitsAsync([FromBody] FilterCriteriaDto criteria)
@@ -138,9 +147,9 @@ namespace HerStory.Server.Controllers
 
                 return Ok(portraits);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             
         }

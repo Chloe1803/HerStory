@@ -45,14 +45,16 @@ namespace HerStory.Server.Repositories
 
         }
 
-        public async Task<ICollection<Portrait>> GetAllPortraitsAsync()
+        public async Task<ICollection<Portrait>> GetAllPortraitsAsync(int offset, int limit)
         {
-            var portraits = await _context.Portrait
-               .Include(p => p.PortraitCategories).ThenInclude(pc => pc.Category)
-               .Include(p => p.PortraitFields).ThenInclude(pf => pf.Field)
-               .ToListAsync();
+            var query = _context.Portrait
+                .Include(p => p.PortraitCategories).ThenInclude(pc => pc.Category)
+                .Include(p => p.PortraitFields).ThenInclude(pf => pf.Field)
+                .OrderBy(p => (p.Id * 2654435761L) % int.MaxValue) // Mélange déterministe en SQL
+                .Skip(offset)
+                .Take(limit);
 
-             return portraits.OrderBy(_ => Guid.NewGuid()).ToList();
+            return await query.ToListAsync();
         }
 
         public async Task<ICollection<Category>> GetCategories()

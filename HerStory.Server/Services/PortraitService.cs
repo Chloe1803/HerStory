@@ -132,9 +132,9 @@ namespace HerStory.Server.Services
 
         }
 
-        public async Task<ICollection<PortraitListDto>> GetAllPortraitsAsync()
+        public async Task<ICollection<PortraitListDto>> GetAllPortraitsAsync(int offset, int limit)
         {
-            var portraits = _mapper.Map<ICollection<PortraitListDto>>(await _portraitRepository.GetAllPortraitsAsync());
+            var portraits = _mapper.Map<ICollection<PortraitListDto>>(await _portraitRepository.GetAllPortraitsAsync(offset, limit));
 
             return portraits;
         }

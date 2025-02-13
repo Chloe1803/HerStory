@@ -11,8 +11,8 @@ export class PortraitService {
 
   constructor(private http: HttpClient, private api: ApiService) { }
 
-  getPortraits(): Observable<PortraitCard[]> {
-    return this.http.get<PortraitCard[]>(this.api.apiUrl + '/Portrait');
+  getPortraits(offset: number = 0): Observable<PortraitCard[]> {
+    return this.http.get<PortraitCard[]>(this.api.apiUrl + '/Portrait?offset='+offset);
   }
 
   getPortraitById(id: number): Observable<PortraitDetail> {

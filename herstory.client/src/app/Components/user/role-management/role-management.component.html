@@ -16,7 +16,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let request of pendingRequests">
-          <td>{{ request.userFirstName }} {{ request.userLastName }}</td>
+          <td>
+            <a [routerLink]="['/otherProfile', request.userId]" class="underline">
+              {{ request.userFirstName }} {{ request.userLastName }}
+            </a>
+          </td>
           <td>{{ RoleConstants.getRoleNameInFrench(request.requestedRole.name) }}</td>
           <td class="actions">
             <button (click)="acceptRequest(request)" class="btn btn-accept">

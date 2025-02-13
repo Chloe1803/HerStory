@@ -17,6 +17,10 @@ export class UserService {
 
   }
 
+  getOtherUserProfile(userId: number): Observable<ProfileUser> {
+    return this.http.get<ProfileUser>(this.api.apiUrl + '/User/otherProfile/' + userId);
+  }
+
   getPendingRoleRequest(): Observable<any>{
     return this.http.get<any>(this.api.apiUrl + '/RoleChange/pending');
   }
