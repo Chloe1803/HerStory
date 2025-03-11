@@ -47,10 +47,11 @@ namespace HerStory.Server.Repositories
 
         public async Task<ICollection<Portrait>> GetAllPortraitsAsync(int offset, int limit)
         {
+            int seed = DateTime.UtcNow.ToString("yyyy-MM-dd").GetHashCode(); // Génère un seed qui change chaque jour
             var query = _context.Portrait
                 .Include(p => p.PortraitCategories).ThenInclude(pc => pc.Category)
                 .Include(p => p.PortraitFields).ThenInclude(pf => pf.Field)
-                .OrderBy(p => (p.Id * 2654435761L) % int.MaxValue) // Mélange déterministe en SQL
+                .OrderBy(p => (p.Id * 2654435761L ^ seed) % int.MaxValue) // Mélange déterministe avec une graine journalière
                 .Skip(offset)
                 .Take(limit);
 

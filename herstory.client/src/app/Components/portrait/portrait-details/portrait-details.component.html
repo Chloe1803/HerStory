@@ -17,10 +17,10 @@
         {{portrait.firstName}} {{portrait.lastName}}
       </h2>
       <p class="text-gray-500 text-lg">
-        Né(e) : {{portrait.dateOfBirth | date}}
+        Née : {{portrait.dateOfBirth | date}}
       </p>
       <p *ngIf="isValidDateOfDeath(portrait.dateOfDeath)" class="text-gray-500 text-lg">
-        Décédé(e) : {{portrait.dateOfDeath | date}}
+        Décédée : {{portrait.dateOfDeath | date}}
       </p>
       <p class="text-gray-500 text-lg">
         Pays de naissance : {{portrait.countryOfBirth}}
