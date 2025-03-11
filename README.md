@@ -47,86 +47,121 @@ HerStory propose un système de rôles pour organiser les contributions collabor
 
 ## 💻 Installation et Lancement
 
-### Prérequis
-Assurez-vous d'avoir installé les éléments suivants sur votre machine :
-1. **Node.js** (v18.x ou supérieur recommandé)
-2. **Angular CLI** (v18.x ou supérieur)
-3. **.NET SDK** (version 8.0 ou supérieur)
-4. **SQL Server** (Express ou une version supérieure)
+### Option 1 : Lancer l'ensemble du projet avec Docker Compose
 
-### Front-end Angular
+#### Prérequis
+Assurez-vous d'avoir installé **Docker** et **Docker Compose** sur votre machine.
 
-#### Installation
-1. Accédez au répertoire du projet client :
-```bash
-   cd Herstory.client
-```
+#### Démarrage du projet
+1. Accédez à la racine du projet :
+   ```bash
+   cd Herstory
+   ```
+2. Lancez les services avec Docker Compose :
+   ```bash
+   docker-compose up --build
+   ```
 
-2. Installez les dépendances 
-```bash
-    ng serve
-```
-#### Lancement en mode développement
-1. Lancement en mode développement :
-```bash
-    ng serve
-```
+Cela va automatiquement créer et configurer :
+- La base de données SQL Server
+- Le back-end ASP.NET Core
+- Le front-end Angular
 
-2. Ouvrez votre navigateur et accédez à http://localhost:4200.
+Une fois le projet lancé :
+- L'API sera accessible à [http://localhost:5103](http://localhost:5103)
+- L'interface Angular sera accessible à [http://localhost:4200](http://localhost:4200)
 
-### Back-end ASP.NET Core
+---
+
+### Option 2 : Installer et lancer chaque composant séparément
+
+### 1. Base de données SQL Server avec Docker
+
+#### Prérequis
+- **Docker** installé sur votre machine
+
+#### Lancement de la base de données
+1. Accédez au dossier des scripts :
+   ```bash
+   cd scripts
+   ```
+2. Construisez et démarrez le conteneur SQL Server :
+   ```bash
+   docker build -t herstory-db .
+   docker run -d --name herstory-db -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD="your_secret_password" -v db-data:/var/opt/mssql herstory-db
+   ```
+
+---
+
+### 2. Back-end ASP.NET Core
+
+#### Prérequis
+- **.NET SDK** (version 8.0 ou supérieure)
 
 #### Installation
 1. Accédez au répertoire du projet serveur :
-```bash
+   ```bash
    cd Herstory.Server
-```
-
-2. Installez les dépendances en utilisant le CLI .NET :
-```bash
+   ```
+2. Installez les dépendances :
+   ```bash
    dotnet restore
-```
+   ```
 
 #### Configuration des variables d'environnement
-
-Créez un fichier .env à la racine du projet serveur avec le contenu suivant :
+Créez un fichier `.env` à la racine du projet serveur avec le contenu suivant :
 ```env
-   DB_CONNECTION_STRING="Server=localhost;Database=HerStoryDB;User Id=your_username;Password=your_password;"
-   JWT_SECRET="your_secret_key"
+DB_CONNECTION_STRING="Server=localhost;Database=HerStoryDB;User Id=your_username;Password=your_password;"
+JWT_SECRET="your_secret_key"
 ```
-**Important** :
-- Les valeurs doivent être entre guillemets si elles contiennent des espaces ou des caractères spéciaux.
-- Ne pas mettre de points virgules à la fin des lignes, cela génère une erreur.
-- Chaque variable doit être sur une ligne distincte
-- Remplacez your_username, your_password et your_secret_key par vos propres valeurs.
 
-#### Initialisation et peuplement de la base de données
-Pour démarrer avec la base de données du projet, vous devez à la fois appliquer les migrations Entity Framework et peupler la base de données avec les données initiales fournies dans le fichier SQL.
-
-1. **Appliquer les migrations Entity Framework**  
-   Exécutez la commande suivante pour appliquer les migrations à la base de données, ce qui créera la structure de la base de données (tables, relations, etc.) :
-
-```bash
+#### Initialisation de la base de données
+1. **Appliquer les migrations Entity Framework** :
+   ```bash
    dotnet ef database update
-```
-
-2. **Peupler la base de données avec des données initiales**
-Pour peupler votre base de données avec des données minimales nécessaires au fonctionnement du projet, vous devez exécuter le fichier SQL HerStoryDB.sql qui contient à la fois la structure de la base de données et les données initiales. Ce fichier est disponible dans le dossier scripts/ de votre projet.
-
-Exécutez la commande suivante pour importer les données dans votre base de données SQL Server :
-```bash
+   ```
+2. **Peupler la base de données** avec le fichier SQL :
+   ```bash
    sqlcmd -S localhost -d HerStoryDB -U your_username -P your_password -i scripts/HerStoryDB.sql
-```
+   ```
 
-**Remarque** : Remplacez your_username et your_password par vos informations de connexion à SQL Server. Assurez-vous que la base de données HerStoryDB existe déjà avant d'exécuter cette commande.
-
-#### Lancement en mode développement
-1. Démarrez le serveur :
+#### Lancement du serveur
 ```bash
    dotnet run
 ```
+L'API sera accessible à [http://localhost:5103](http://localhost:5103).
 
-2. L'API sera accessible à http://localhost:5103.
+---
+
+### 3. Front-end Angular
+
+#### Prérequis
+- **Node.js** (v18.x ou supérieur recommandé)
+- **Angular CLI** (v18.x ou supérieur)
+
+#### Installation
+1. Accédez au répertoire du projet client :
+   ```bash
+   cd Herstory.client
+   ```
+2. Installez les dépendances :
+   ```bash
+   npm install
+   ```
+
+#### Lancement en mode développement
+```bash
+   ng serve
+```
+L'interface Angular sera accessible à [http://localhost:4200](http://localhost:4200).
+
+---
+
+### 🎯 Résumé des options
+- **Option 1 (recommandée)** : Utiliser Docker Compose pour lancer l'ensemble du projet en une seule commande.
+- **Option 2** : Installer et exécuter chaque composant manuellement si vous souhaitez plus de contrôle.
+
+---
 
 
 ## 📚 Documentation complémentaire

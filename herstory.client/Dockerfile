@@ -12,5 +12,9 @@ RUN npm run build-prod
 # Étape 2 : Serveur Nginx pour le front
 FROM nginx:alpine
 COPY --from=build /app/dist/herstory.client/browser /usr/share/nginx/html
+
+
+COPY ./nginx.conf  /etc/nginx/conf.d/default.conf
+
 EXPOSE 4200
 CMD ["nginx", "-g", "daemon off;"]
